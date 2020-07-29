@@ -1,0 +1,19 @@
+# os stuff
+.DS_Store
+.Trashes
+Thumbs.db
+*._*
+
+# build files
+*.o
+.cxx
+
+# android studio stuff
+.idea
+.gradle
+
+# build files
+build
+
+# text editor
+.vscode
