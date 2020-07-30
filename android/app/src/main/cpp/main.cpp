@@ -193,11 +193,28 @@ static void engine_term_display(struct engine* engine) {
  * Process the next input event.
  */
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
-    auto* engine = (struct engine*)app->userData;
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        engine->animating = 1;
-        engine->state.x = AMotionEvent_getX(event, 0);
-        engine->state.y = AMotionEvent_getY(event, 0);
+        // get pointer index
+        int32_t action_index = AMotionEvent_getAction(event);
+        int32_t index = (action_index & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+        uint32_t action = action_index & AMOTION_EVENT_ACTION_MASK;
+
+        // get id, x, and y for event
+        int32_t id = AMotionEvent_getPointerId(event, index);
+        float x = AMotionEvent_getX(event, index);
+        float y = AMotionEvent_getY(event, index);
+
+        // event handling
+        if (action == AMOTION_EVENT_ACTION_DOWN || action == AMOTION_EVENT_ACTION_POINTER_DOWN) {
+            startTouch((int)id, x, y);
+        }
+        else if (action == AMOTION_EVENT_ACTION_MOVE) {
+            moveTouch((int)id, x, y);
+        }
+        else if (action == AMOTION_EVENT_ACTION_UP || action == AMOTION_EVENT_ACTION_POINTER_UP) {
+            endTouch((int)id, x, y);
+        }
+
         return 1;
     }
     return 0;
@@ -227,6 +244,10 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             engine_term_display(engine);
             break;
         case APP_CMD_GAINED_FOCUS:
+            engine->animating = 1;
+            break;
+        case APP_CMD_CONTENT_RECT_CHANGED:
+            handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
             break;
         case APP_CMD_LOST_FOCUS:
             // Stop animating.

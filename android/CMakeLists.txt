@@ -18,8 +18,9 @@ cmake_minimum_required(VERSION 3.4.1)
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
 
 # build common files as a static lib
+get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
 add_library(game_common STATIC
-        C:/Users/Zack/Desktop/MAIN_FOLDER/programming/c++/idle/common/game.c)
+        ${PARENT_DIR}/common/game.c)
 # lib dependencies
 target_link_libraries(game_common
         GLESv2)
