@@ -4,13 +4,13 @@
 Thumbs.db
 *._*
 
-# build files
-*.o
-.cxx
-
 # android studio stuff
 .idea
 .gradle
+*.o
+.cxx
+*.iml
+local.properties
 
 # build files
 build
