@@ -1,18 +1,19 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef __ANDROID__
+#include <android/log.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #elif __APPLE__
 #include <OpenGLES/ES2/gl.h>
 #endif
 
-GLenum loadShader(GLenum type, const char* shaderSrc);
+// utilities
+void LOG(char* message);
+
+// main stuff
+GLuint loadShader(GLenum type, const char* shaderSrc);
 void glSetup(double width, double height);
 void glRender();
 
@@ -24,7 +25,4 @@ void startTouch(int id, float x, float y);
 void moveTouch(int id, float x, float y);
 void endTouch(int id, float x, float y);
 
-#ifdef __cplusplus
-}
-#endif
 #endif

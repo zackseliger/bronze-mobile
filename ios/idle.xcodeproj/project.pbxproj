@@ -7,26 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		141607F424D4867F0044B10F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141607F324D4867F0044B10F /* GLKit.framework */; };
 		14860FBC24D24091003F5BB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FBB24D24091003F5BB8 /* AppDelegate.m */; };
 		14860FBF24D24091003F5BB8 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FBE24D24091003F5BB8 /* SceneDelegate.m */; };
-		14860FC224D24091003F5BB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FC124D24091003F5BB8 /* ViewController.m */; };
+		14860FC224D24091003F5BB8 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14860FC124D24091003F5BB8 /* ViewController.mm */; };
 		14860FC524D24091003F5BB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14860FC324D24091003F5BB8 /* Main.storyboard */; };
 		14860FCD24D24096003F5BB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FCC24D24096003F5BB8 /* main.m */; };
-		14860FDC24D26EC2003F5BB8 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 14860FDA24D26EC2003F5BB8 /* game.c */; };
+		14860FDC24D26EC2003F5BB8 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14860FDA24D26EC2003F5BB8 /* game.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		141607F324D4867F0044B10F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		14860FB724D24091003F5BB8 /* Idle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Idle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14860FBA24D24091003F5BB8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		14860FBB24D24091003F5BB8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		14860FBD24D24091003F5BB8 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		14860FBE24D24091003F5BB8 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		14860FC024D24091003F5BB8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		14860FC124D24091003F5BB8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		14860FC124D24091003F5BB8 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		14860FC424D24091003F5BB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		14860FCB24D24096003F5BB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14860FCC24D24096003F5BB8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		14860FDA24D26EC2003F5BB8 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
+		14860FDA24D26EC2003F5BB8 /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
 		14860FDB24D26EC2003F5BB8 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,12 +37,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				141607F424D4867F0044B10F /* GLKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		141607F224D4867F0044B10F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				141607F324D4867F0044B10F /* GLKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		14860FAE24D24091003F5BB8 = {
 			isa = PBXGroup;
 			children = (
@@ -50,11 +61,12 @@
 				14860FBD24D24091003F5BB8 /* SceneDelegate.h */,
 				14860FBE24D24091003F5BB8 /* SceneDelegate.m */,
 				14860FC024D24091003F5BB8 /* ViewController.h */,
-				14860FC124D24091003F5BB8 /* ViewController.m */,
+				14860FC124D24091003F5BB8 /* ViewController.mm */,
 				14860FC324D24091003F5BB8 /* Main.storyboard */,
 				14860FCB24D24096003F5BB8 /* Info.plist */,
 				14860FCC24D24096003F5BB8 /* main.m */,
 				14860FB824D24091003F5BB8 /* Products */,
+				141607F224D4867F0044B10F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,7 +81,7 @@
 		14860FD924D26EC2003F5BB8 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				14860FDA24D26EC2003F5BB8 /* game.c */,
+				14860FDA24D26EC2003F5BB8 /* game.cpp */,
 				14860FDB24D26EC2003F5BB8 /* game.h */,
 			);
 			name = common;
@@ -144,8 +156,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14860FDC24D26EC2003F5BB8 /* game.c in Sources */,
-				14860FC224D24091003F5BB8 /* ViewController.m in Sources */,
+				14860FDC24D26EC2003F5BB8 /* game.cpp in Sources */,
+				14860FC224D24091003F5BB8 /* ViewController.mm in Sources */,
 				14860FBC24D24091003F5BB8 /* AppDelegate.m in Sources */,
 				14860FCD24D24096003F5BB8 /* main.m in Sources */,
 				14860FBF24D24091003F5BB8 /* SceneDelegate.m in Sources */,

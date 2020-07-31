@@ -15,22 +15,20 @@
 #
 
 cmake_minimum_required(VERSION 3.4.1)
-set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
 
 # build common files as a static lib
-get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH)
-add_library(game_common STATIC
-        ${PARENT_DIR}/common/game.c)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
+get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH) # get the path to the parent folder we're in
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common GAME_SOURCES) # all source files in common/
+add_library(game_common STATIC ${GAME_SOURCES})
 # lib dependencies
-target_link_libraries(game_common
-        GLESv2)
+target_link_libraries(game_common GLESv2)
 # includes
-target_include_directories(game_common PRIVATE
-        common)
+target_include_directories(game_common PRIVATE common)
 
 # build native_app_glue as a static lib
-add_library(native_app_glue STATIC
-    ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)
+set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
+add_library(native_app_glue STATIC ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)
 
 # now build app's shared lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")

@@ -1,5 +1,14 @@
 #include "game.h"
 
+// utilities
+void LOG(char* message) {
+  #ifdef __ANDROID__
+  Log.i(null, message);
+  #elif __APPLE__
+  printf(message);
+  #endif
+}
+
 float topX = 0;
 float topY = -100;
 GLuint programObject;
@@ -16,7 +25,7 @@ GLuint loadShader(GLenum type, const char* shaderSrc) {
   // Create the shader object
   shader = glCreateShader(type);
   // Load the shader source
-  glShaderSource(shader, 1, &shaderSrc, NULL);
+  glShaderSource(shader, 1, &shaderSrc, nullptr);
   // Compile the shader
   glCompileShader(shader);
   // Check the compile status
@@ -32,7 +41,7 @@ GLuint loadShader(GLenum type, const char* shaderSrc) {
 
 void glSetup(double width, double height) {
   // load our shaders
-  GLbyte vShaderStr[] =
+  char vShaderStr[] =
           "attribute vec2 vPosition; \n"
           "uniform mat4 uProj; \n"
           "uniform mat4 uCam; \n"
@@ -41,11 +50,11 @@ void glSetup(double width, double height) {
           " gl_Position = uProj * uCam * vec4(vPosition, 0.0, 1.0); \n"
           "} \n";
 
-  GLbyte fShaderStr[] =
+  char fShaderStr[] =
           "precision mediump float; \n"
           "void main() \n"
           "{ \n"
-          " gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); \n"
+          " gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0); \n"
           "} \n";
 
   GLuint vertexShader = loadShader(GL_VERTEX_SHADER, vShaderStr);
@@ -116,8 +125,8 @@ void handleResize(double width, double height) {
   float top = -screenHeight / 2;
   float bot = screenHeight / 2;
   glUniformMatrix4fv(uProjLoc, 1, GL_FALSE,(GLfloat[]){
-    2.0 / (right - left), 0, 0, -(right + left) / (right - left),
-    0, 2.0 / (top - bot), 0, -(top + bot) / (top - bot),
+      static_cast<GLfloat>(2.0 / (right - left)), 0, 0, -(right + left) / (right - left),
+      0, static_cast<GLfloat>(2.0 / (top - bot)), 0, -(top + bot) / (top - bot),
     0, 0, -2.0 / (1.0 + 1.0), -(1.0 - 1.0) / (1.0 + 1.0),
     0, 0, 0, 1
   });
