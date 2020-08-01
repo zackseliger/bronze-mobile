@@ -333,8 +333,10 @@ void android_main(struct android_app* state) {
         engine.state = *(struct saved_state*)state->savedState;
     }
 
-    // loop waiting for stuff to do.
+    // sending over our asset manager to common lib
+    initAssetManager(engine.app->activity->assetManager);
 
+    // loop waiting for stuff to do.
     while (true) {
         // Read all pending events.
         int ident;

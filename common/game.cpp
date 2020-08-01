@@ -1,13 +1,16 @@
 #include "game.h"
+#include <fstream>
+#include <string>
 
-// utilities
-void LOG(char* message) {
-  #ifdef __ANDROID__
-  Log.i(null, message);
-  #elif __APPLE__
-  printf(message);
-  #endif
-}
+#ifdef __ANDROID__
+#include <android/log.h>
+#define  ALOG(...)  __android_log_print(ANDROID_LOG_INFO,"io.deemo",__VA_ARGS__)
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#include <android/asset_manager.h>
+#elif __APPLE__
+#include <OpenGLES/ES2/gl.h>
+#endif
 
 float topX = 0;
 float topY = -100;
@@ -17,6 +20,30 @@ double screenHeight;
 float green = 0.1;
 GLint uProjLoc;
 GLint uCamLoc;
+
+// utilities
+void LOG(const char* message) {
+  #ifdef __ANDROID__
+  ALOG("%s", message);
+  #elif __APPLE__
+  printf("%s", message);
+  #endif
+}
+#ifdef __ANDROID__
+AAssetManager* assetManager;
+const char* readFile(const char* filename) {
+  AAsset* asset = AAssetManager_open(assetManager, filename, AASSET_MODE_BUFFER);
+  assert(asset != nullptr);
+
+  const void* buffer = AAsset_getBuffer(asset);
+  AAsset_close(asset);
+  return (const char*)buffer;
+}
+void initAssetManager(AAssetManager* manager) {
+  assetManager = manager;
+}
+// Apple implementation is in AssetsUtils.mm
+#endif
 
 GLuint loadShader(GLenum type, const char* shaderSrc) {
   GLuint shader;
@@ -41,21 +68,8 @@ GLuint loadShader(GLenum type, const char* shaderSrc) {
 
 void glSetup(double width, double height) {
   // load our shaders
-  char vShaderStr[] =
-          "attribute vec2 vPosition; \n"
-          "uniform mat4 uProj; \n"
-          "uniform mat4 uCam; \n"
-          "void main() \n"
-          "{ \n"
-          " gl_Position = uProj * uCam * vec4(vPosition, 0.0, 1.0); \n"
-          "} \n";
-
-  char fShaderStr[] =
-          "precision mediump float; \n"
-          "void main() \n"
-          "{ \n"
-          " gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0); \n"
-          "} \n";
+  const char* vShaderStr = readFile("shaders/color.vsh");
+  const char* fShaderStr = readFile("shaders/color.fsh");
 
   GLuint vertexShader = loadShader(GL_VERTEX_SHADER, vShaderStr);
   GLuint fragmentShader = loadShader(GL_FRAGMENT_SHADER, fShaderStr);

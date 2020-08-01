@@ -2,15 +2,20 @@
 #define _GAME_H_
 
 #ifdef __ANDROID__
-#include <android/log.h>
 #include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include <android/asset_manager.h>
 #elif __APPLE__
 #include <OpenGLES/ES2/gl.h>
 #endif
 
 // utilities
-void LOG(char* message);
+void LOG(const char* message);
+
+// assets
+#ifdef __ANDROID__
+void initAssetManager(AAssetManager* manager);
+#endif
+const char* readFile(const char* filename);
 
 // main stuff
 GLuint loadShader(GLenum type, const char* shaderSrc);
