@@ -8,6 +8,12 @@
 #include <OpenGLES/ES2/gl.h>
 #endif
 
+struct FileData {
+    const long size;
+    const void* data;
+    const void* handle;
+};
+
 // utilities
 void LOG(const char* message);
 
@@ -15,10 +21,10 @@ void LOG(const char* message);
 #ifdef __ANDROID__
 void initAssetManager(AAssetManager* manager);
 #endif
-const char* readFile(const char* filename);
+FileData getAsset(const char* filename);
 
 // main stuff
-GLuint loadShader(GLenum type, const char* shaderSrc);
+GLuint buildShader(GLenum type, const char* shaderSrc);
 void glSetup(double width, double height);
 void glRender();
 

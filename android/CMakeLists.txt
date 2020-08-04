@@ -15,16 +15,31 @@
 #
 
 cmake_minimum_required(VERSION 3.4.1)
-
-# build common files as a static lib
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH) # get the path to the parent folder we're in
+
+# zlib
+set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/zlib Z_SOURCES)
+add_library(libz STATIC ${Z_SOURCES})
+target_include_directories(libz PRIVATE ../lib/zlib)
+
+# libpng
+set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
+add_definitions(-DPNG_ARM_NEON_OPT=0)
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/libpng PNG_SOURCES)
+add_library(png STATIC ${PNG_SOURCES})
+target_link_libraries(png libz)
+target_include_directories(png PRIVATE ../lib/libpng)
+
+# build common game files as a static lib
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common GAME_SOURCES) # all source files in common/
 add_library(game_common STATIC ${GAME_SOURCES})
 # lib dependencies
-target_link_libraries(game_common GLESv2)
+target_link_libraries(game_common GLESv2 png)
 # includes
-target_include_directories(game_common PRIVATE common)
+target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/libpng)
+target_include_directories(game_common PUBLIC ${PARENT_DIR}/common)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
@@ -32,7 +47,6 @@ add_library(native_app_glue STATIC ${ANDROID_NDK}/sources/android/native_app_glu
 
 # now build app's shared lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
-
 # Export ANativeActivity_onCreate(),
 # Refer to: https://github.com/android-ndk/ndk/issues/381.
 set(CMAKE_SHARED_LINKER_FLAGS
