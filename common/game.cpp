@@ -2,7 +2,7 @@
 #include "image.h"
 #include <fstream>
 #include <string>
-#include <png.h>
+#include "png.h"
 #include <vector>
 
 #define BUFFER_OFFSET(i) ((void*)(i))
@@ -48,7 +48,7 @@ void LOG(const char* message) {
   #ifdef __ANDROID__
   ALOG("%s", message);
   #elif __APPLE__
-  printf("%s", message);
+  printf("%s\n", message);
   #endif
 }
 #ifdef __ANDROID__
@@ -85,6 +85,7 @@ GLuint buildShader(GLenum type, const char* shaderSrc) {
   // Create the shader object
   shader = glCreateShader(type);
   // Load the shader source
+  LOG(shaderSrc);
   glShaderSource(shader, 1, &shaderSrc, nullptr);
   // Compile the shader
   glCompileShader(shader);
@@ -113,19 +114,20 @@ GLuint buildProgram(const char* vertexShaderPath, const char* fragmentShaderPath
   // load files
   FileData vShaderFile = getAsset(vertexShaderPath);
   FileData fShaderFile = getAsset(fragmentShaderPath);
-
+    
   // create shaders
   GLuint vShader = buildShader(GL_VERTEX_SHADER, (const char*)vShaderFile.data);
   GLuint fShader = buildShader(GL_FRAGMENT_SHADER, (const char*)fShaderFile.data);
-  // free assets
-  freeAsset(vShaderFile);
-  freeAsset(fShaderFile);
-
+    
   // create and return program
   GLuint programId = glCreateProgram();
   glAttachShader(programId, vShader);
   glAttachShader(programId, fShader);
   glLinkProgram(programId);
+    
+  // free assets
+  freeAsset(vShaderFile);
+  freeAsset(fShaderFile);
 
   // make sure it worked out
   GLint isLinked = 0;
@@ -137,8 +139,8 @@ GLuint buildProgram(const char* vertexShaderPath, const char* fragmentShaderPath
     // The maxLength includes the NULL character
     const char* errorLog = (const char*)malloc(maxLength);
     glGetProgramInfoLog(programId, maxLength, &maxLength, (GLchar*)errorLog);
-    LOG(errorLog);
     LOG("COULDN'T LINK PROGRAM:");
+    LOG(errorLog);
     free((void*)errorLog);
 
     // delete stuff and return 0
@@ -206,8 +208,7 @@ void glRender() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glDisableVertexAttribArray(p_posLoc);
   glDisableVertexAttribArray(p_texCoord);
-
-
+  
   // draw triangle
   GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200,};
   glUseProgram(colorProgram);

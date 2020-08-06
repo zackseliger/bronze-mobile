@@ -1,7 +1,7 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-#include <png.h>
+#include "png.h"
 
 #ifdef __ANDROID__
 #include <GLES2/gl2.h>

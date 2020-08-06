@@ -8,11 +8,11 @@
 #include <OpenGLES/ES2/gl.h>
 #endif
 
-struct FileData {
+typedef struct FileData {
     const long size;
     const void* data;
     const void* handle;
-};
+} FileData;
 
 // utilities
 void LOG(const char* message);
@@ -22,6 +22,7 @@ void LOG(const char* message);
 void initAssetManager(AAssetManager* manager);
 #endif
 FileData getAsset(const char* filename);
+void freeAsset(FileData asset);
 
 // main stuff
 GLuint buildShader(GLenum type, const char* shaderSrc);

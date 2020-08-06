@@ -10,6 +10,38 @@
 		141607F424D4867F0044B10F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141607F324D4867F0044B10F /* GLKit.framework */; };
 		1453351024D5F2A00017F2F3 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1453350F24D5F2A00017F2F3 /* assets */; };
 		1453351224D6153A0017F2F3 /* AssetUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1453351124D6153A0017F2F3 /* AssetUtils.mm */; };
+		1453352C24D915C80017F2F3 /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351724D915C80017F2F3 /* pngrio.c */; };
+		1453352D24D915C80017F2F3 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351824D915C80017F2F3 /* pngerror.c */; };
+		1453352E24D915C80017F2F3 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351924D915C80017F2F3 /* pngwio.c */; };
+		1453352F24D915C80017F2F3 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351B24D915C80017F2F3 /* pngtrans.c */; };
+		1453353024D915C80017F2F3 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351D24D915C80017F2F3 /* pngwrite.c */; };
+		1453353124D915C80017F2F3 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453351F24D915C80017F2F3 /* pngwutil.c */; };
+		1453353224D915C80017F2F3 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352024D915C80017F2F3 /* pngwtran.c */; };
+		1453353324D915C80017F2F3 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352324D915C80017F2F3 /* pngpread.c */; };
+		1453353424D915C80017F2F3 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352524D915C80017F2F3 /* pngread.c */; };
+		1453353524D915C80017F2F3 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352624D915C80017F2F3 /* pngmem.c */; };
+		1453353624D915C80017F2F3 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352724D915C80017F2F3 /* pngget.c */; };
+		1453353724D915C80017F2F3 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352824D915C80017F2F3 /* png.c */; };
+		1453353824D915C80017F2F3 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352924D915C80017F2F3 /* pngrtran.c */; };
+		1453353924D915C80017F2F3 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352A24D915C80017F2F3 /* pngrutil.c */; };
+		1453353A24D915C80017F2F3 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453352B24D915C80017F2F3 /* pngset.c */; };
+		1453355624D915D30017F2F3 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453353E24D915D30017F2F3 /* inflate.c */; };
+		1453355724D915D30017F2F3 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453353F24D915D30017F2F3 /* compress.c */; };
+		1453355824D915D30017F2F3 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354024D915D30017F2F3 /* deflate.c */; };
+		1453355924D915D30017F2F3 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354224D915D30017F2F3 /* gzread.c */; };
+		1453355A24D915D30017F2F3 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354524D915D30017F2F3 /* crc32.c */; };
+		1453355B24D915D30017F2F3 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354624D915D30017F2F3 /* infback.c */; };
+		1453355C24D915D30017F2F3 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354724D915D30017F2F3 /* zutil.c */; };
+		1453355D24D915D30017F2F3 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354B24D915D30017F2F3 /* gzlib.c */; };
+		1453355E24D915D30017F2F3 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354D24D915D30017F2F3 /* inftrees.c */; };
+		1453355F24D915D30017F2F3 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354E24D915D30017F2F3 /* uncompr.c */; };
+		1453356024D915D30017F2F3 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453354F24D915D30017F2F3 /* gzwrite.c */; };
+		1453356124D915D30017F2F3 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355024D915D30017F2F3 /* trees.c */; };
+		1453356224D915D30017F2F3 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355124D915D30017F2F3 /* gzclose.c */; };
+		1453356324D915D30017F2F3 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355324D915D30017F2F3 /* inffast.c */; };
+		1453356424D915D30017F2F3 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355424D915D30017F2F3 /* adler32.c */; };
+		1453356E24D916CE0017F2F3 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1453356D24D916CE0017F2F3 /* image.cpp */; };
+		1453357124DBA3D70017F2F3 /* AssetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1453357024DBA3D70017F2F3 /* AssetUtils.swift */; };
 		14860FBC24D24091003F5BB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FBB24D24091003F5BB8 /* AppDelegate.m */; };
 		14860FBF24D24091003F5BB8 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FBE24D24091003F5BB8 /* SceneDelegate.m */; };
 		14860FC224D24091003F5BB8 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14860FC124D24091003F5BB8 /* ViewController.mm */; };
@@ -22,6 +54,58 @@
 		141607F324D4867F0044B10F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		1453350F24D5F2A00017F2F3 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		1453351124D6153A0017F2F3 /* AssetUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AssetUtils.mm; sourceTree = SOURCE_ROOT; };
+		1453351624D915C80017F2F3 /* pnginfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnginfo.h; sourceTree = "<group>"; };
+		1453351724D915C80017F2F3 /* pngrio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngrio.c; sourceTree = "<group>"; };
+		1453351824D915C80017F2F3 /* pngerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngerror.c; sourceTree = "<group>"; };
+		1453351924D915C80017F2F3 /* pngwio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwio.c; sourceTree = "<group>"; };
+		1453351A24D915C80017F2F3 /* pngstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngstruct.h; sourceTree = "<group>"; };
+		1453351B24D915C80017F2F3 /* pngtrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngtrans.c; sourceTree = "<group>"; };
+		1453351C24D915C80017F2F3 /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngpriv.h; sourceTree = "<group>"; };
+		1453351D24D915C80017F2F3 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwrite.c; sourceTree = "<group>"; };
+		1453351E24D915C80017F2F3 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		1453351F24D915C80017F2F3 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwutil.c; sourceTree = "<group>"; };
+		1453352024D915C80017F2F3 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwtran.c; sourceTree = "<group>"; };
+		1453352124D915C80017F2F3 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		1453352224D915C80017F2F3 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		1453352324D915C80017F2F3 /* pngpread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngpread.c; sourceTree = "<group>"; };
+		1453352424D915C80017F2F3 /* pngdebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngdebug.h; sourceTree = "<group>"; };
+		1453352524D915C80017F2F3 /* pngread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngread.c; sourceTree = "<group>"; };
+		1453352624D915C80017F2F3 /* pngmem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngmem.c; sourceTree = "<group>"; };
+		1453352724D915C80017F2F3 /* pngget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngget.c; sourceTree = "<group>"; };
+		1453352824D915C80017F2F3 /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = png.c; sourceTree = "<group>"; };
+		1453352924D915C80017F2F3 /* pngrtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngrtran.c; sourceTree = "<group>"; };
+		1453352A24D915C80017F2F3 /* pngrutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngrutil.c; sourceTree = "<group>"; };
+		1453352B24D915C80017F2F3 /* pngset.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngset.c; sourceTree = "<group>"; };
+		1453353C24D915D30017F2F3 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		1453353D24D915D30017F2F3 /* inftrees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inftrees.h; sourceTree = "<group>"; };
+		1453353E24D915D30017F2F3 /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inflate.c; sourceTree = "<group>"; };
+		1453353F24D915D30017F2F3 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
+		1453354024D915D30017F2F3 /* deflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deflate.c; sourceTree = "<group>"; };
+		1453354124D915D30017F2F3 /* inffixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffixed.h; sourceTree = "<group>"; };
+		1453354224D915D30017F2F3 /* gzread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzread.c; sourceTree = "<group>"; };
+		1453354324D915D30017F2F3 /* trees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trees.h; sourceTree = "<group>"; };
+		1453354424D915D30017F2F3 /* inffast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffast.h; sourceTree = "<group>"; };
+		1453354524D915D30017F2F3 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
+		1453354624D915D30017F2F3 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
+		1453354724D915D30017F2F3 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
+		1453354824D915D30017F2F3 /* deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deflate.h; sourceTree = "<group>"; };
+		1453354924D915D30017F2F3 /* gzguts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gzguts.h; sourceTree = "<group>"; };
+		1453354A24D915D30017F2F3 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
+		1453354B24D915D30017F2F3 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzlib.c; sourceTree = "<group>"; };
+		1453354C24D915D30017F2F3 /* inflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inflate.h; sourceTree = "<group>"; };
+		1453354D24D915D30017F2F3 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
+		1453354E24D915D30017F2F3 /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uncompr.c; sourceTree = "<group>"; };
+		1453354F24D915D30017F2F3 /* gzwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzwrite.c; sourceTree = "<group>"; };
+		1453355024D915D30017F2F3 /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trees.c; sourceTree = "<group>"; };
+		1453355124D915D30017F2F3 /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzclose.c; sourceTree = "<group>"; };
+		1453355224D915D30017F2F3 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
+		1453355324D915D30017F2F3 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
+		1453355424D915D30017F2F3 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
+		1453355524D915D30017F2F3 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
+		1453356C24D916CE0017F2F3 /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
+		1453356D24D916CE0017F2F3 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		1453356F24DBA3D60017F2F3 /* idle-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "idle-Bridging-Header.h"; sourceTree = "<group>"; };
+		1453357024DBA3D70017F2F3 /* AssetUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetUtils.swift; sourceTree = "<group>"; };
 		14860FB724D24091003F5BB8 /* Idle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Idle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14860FBA24D24091003F5BB8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		14860FBB24D24091003F5BB8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -56,9 +140,75 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1453351524D915C80017F2F3 /* libpng */ = {
+			isa = PBXGroup;
+			children = (
+				1453351624D915C80017F2F3 /* pnginfo.h */,
+				1453351724D915C80017F2F3 /* pngrio.c */,
+				1453351824D915C80017F2F3 /* pngerror.c */,
+				1453351924D915C80017F2F3 /* pngwio.c */,
+				1453351A24D915C80017F2F3 /* pngstruct.h */,
+				1453351B24D915C80017F2F3 /* pngtrans.c */,
+				1453351C24D915C80017F2F3 /* pngpriv.h */,
+				1453351D24D915C80017F2F3 /* pngwrite.c */,
+				1453351E24D915C80017F2F3 /* png.h */,
+				1453351F24D915C80017F2F3 /* pngwutil.c */,
+				1453352024D915C80017F2F3 /* pngwtran.c */,
+				1453352124D915C80017F2F3 /* pnglibconf.h */,
+				1453352224D915C80017F2F3 /* pngconf.h */,
+				1453352324D915C80017F2F3 /* pngpread.c */,
+				1453352424D915C80017F2F3 /* pngdebug.h */,
+				1453352524D915C80017F2F3 /* pngread.c */,
+				1453352624D915C80017F2F3 /* pngmem.c */,
+				1453352724D915C80017F2F3 /* pngget.c */,
+				1453352824D915C80017F2F3 /* png.c */,
+				1453352924D915C80017F2F3 /* pngrtran.c */,
+				1453352A24D915C80017F2F3 /* pngrutil.c */,
+				1453352B24D915C80017F2F3 /* pngset.c */,
+			);
+			name = libpng;
+			path = ../lib/libpng;
+			sourceTree = "<group>";
+		};
+		1453353B24D915D30017F2F3 /* zlib */ = {
+			isa = PBXGroup;
+			children = (
+				1453353C24D915D30017F2F3 /* zutil.h */,
+				1453353D24D915D30017F2F3 /* inftrees.h */,
+				1453353E24D915D30017F2F3 /* inflate.c */,
+				1453353F24D915D30017F2F3 /* compress.c */,
+				1453354024D915D30017F2F3 /* deflate.c */,
+				1453354124D915D30017F2F3 /* inffixed.h */,
+				1453354224D915D30017F2F3 /* gzread.c */,
+				1453354324D915D30017F2F3 /* trees.h */,
+				1453354424D915D30017F2F3 /* inffast.h */,
+				1453354524D915D30017F2F3 /* crc32.c */,
+				1453354624D915D30017F2F3 /* infback.c */,
+				1453354724D915D30017F2F3 /* zutil.c */,
+				1453354824D915D30017F2F3 /* deflate.h */,
+				1453354924D915D30017F2F3 /* gzguts.h */,
+				1453354A24D915D30017F2F3 /* zlib.h */,
+				1453354B24D915D30017F2F3 /* gzlib.c */,
+				1453354C24D915D30017F2F3 /* inflate.h */,
+				1453354D24D915D30017F2F3 /* inftrees.c */,
+				1453354E24D915D30017F2F3 /* uncompr.c */,
+				1453354F24D915D30017F2F3 /* gzwrite.c */,
+				1453355024D915D30017F2F3 /* trees.c */,
+				1453355124D915D30017F2F3 /* gzclose.c */,
+				1453355224D915D30017F2F3 /* crc32.h */,
+				1453355324D915D30017F2F3 /* inffast.c */,
+				1453355424D915D30017F2F3 /* adler32.c */,
+				1453355524D915D30017F2F3 /* zconf.h */,
+			);
+			name = zlib;
+			path = ../lib/zlib;
+			sourceTree = "<group>";
+		};
 		14860FAE24D24091003F5BB8 = {
 			isa = PBXGroup;
 			children = (
+				1453353B24D915D30017F2F3 /* zlib */,
+				1453351524D915C80017F2F3 /* libpng */,
 				1453350F24D5F2A00017F2F3 /* assets */,
 				14860FD924D26EC2003F5BB8 /* common */,
 				14860FBA24D24091003F5BB8 /* AppDelegate.h */,
@@ -68,9 +218,11 @@
 				14860FC024D24091003F5BB8 /* ViewController.h */,
 				14860FC124D24091003F5BB8 /* ViewController.mm */,
 				1453351124D6153A0017F2F3 /* AssetUtils.mm */,
+				1453357024DBA3D70017F2F3 /* AssetUtils.swift */,
 				14860FC324D24091003F5BB8 /* Main.storyboard */,
 				14860FCB24D24096003F5BB8 /* Info.plist */,
 				14860FCC24D24096003F5BB8 /* main.m */,
+				1453356F24DBA3D60017F2F3 /* idle-Bridging-Header.h */,
 				14860FB824D24091003F5BB8 /* Products */,
 				141607F224D4867F0044B10F /* Frameworks */,
 			);
@@ -87,6 +239,8 @@
 		14860FD924D26EC2003F5BB8 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				1453356D24D916CE0017F2F3 /* image.cpp */,
+				1453356C24D916CE0017F2F3 /* image.h */,
 				14860FDA24D26EC2003F5BB8 /* game.cpp */,
 				14860FDB24D26EC2003F5BB8 /* game.h */,
 			);
@@ -125,6 +279,7 @@
 				TargetAttributes = {
 					14860FB624D24091003F5BB8 = {
 						CreatedOnToolsVersion = 11.2.1;
+						LastSwiftMigration = 1120;
 					};
 				};
 			};
@@ -163,11 +318,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1453356124D915D30017F2F3 /* trees.c in Sources */,
+				1453356E24D916CE0017F2F3 /* image.cpp in Sources */,
 				14860FDC24D26EC2003F5BB8 /* game.cpp in Sources */,
+				1453353124D915C80017F2F3 /* pngwutil.c in Sources */,
 				14860FC224D24091003F5BB8 /* ViewController.mm in Sources */,
+				1453353724D915C80017F2F3 /* png.c in Sources */,
+				1453356224D915D30017F2F3 /* gzclose.c in Sources */,
+				1453355724D915D30017F2F3 /* compress.c in Sources */,
+				1453352D24D915C80017F2F3 /* pngerror.c in Sources */,
+				1453356024D915D30017F2F3 /* gzwrite.c in Sources */,
+				1453353224D915C80017F2F3 /* pngwtran.c in Sources */,
+				1453355A24D915D30017F2F3 /* crc32.c in Sources */,
+				1453356424D915D30017F2F3 /* adler32.c in Sources */,
+				1453355824D915D30017F2F3 /* deflate.c in Sources */,
+				1453353824D915C80017F2F3 /* pngrtran.c in Sources */,
+				1453355F24D915D30017F2F3 /* uncompr.c in Sources */,
+				1453352C24D915C80017F2F3 /* pngrio.c in Sources */,
+				1453353924D915C80017F2F3 /* pngrutil.c in Sources */,
 				1453351224D6153A0017F2F3 /* AssetUtils.mm in Sources */,
+				1453352E24D915C80017F2F3 /* pngwio.c in Sources */,
 				14860FBC24D24091003F5BB8 /* AppDelegate.m in Sources */,
+				1453355E24D915D30017F2F3 /* inftrees.c in Sources */,
 				14860FCD24D24096003F5BB8 /* main.m in Sources */,
+				1453355C24D915D30017F2F3 /* zutil.c in Sources */,
+				1453353324D915C80017F2F3 /* pngpread.c in Sources */,
+				1453355B24D915D30017F2F3 /* infback.c in Sources */,
+				1453353A24D915C80017F2F3 /* pngset.c in Sources */,
+				1453356324D915D30017F2F3 /* inffast.c in Sources */,
+				1453357124DBA3D70017F2F3 /* AssetUtils.swift in Sources */,
+				1453355D24D915D30017F2F3 /* gzlib.c in Sources */,
+				1453353424D915C80017F2F3 /* pngread.c in Sources */,
+				1453353624D915C80017F2F3 /* pngget.c in Sources */,
+				1453355624D915D30017F2F3 /* inflate.c in Sources */,
+				1453353024D915C80017F2F3 /* pngwrite.c in Sources */,
+				1453353524D915C80017F2F3 /* pngmem.c in Sources */,
+				1453355924D915D30017F2F3 /* gzread.c in Sources */,
+				1453352F24D915C80017F2F3 /* pngtrans.c in Sources */,
 				14860FBF24D24091003F5BB8 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -307,12 +495,16 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.deemo.idle;
 				PRODUCT_NAME = Idle;
+				SWIFT_OBJC_BRIDGING_HEADER = "idle-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -321,15 +513,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PREPROCESSOR_DEFINITIONS = "GLES_SILENCE_DEPRECATION=1";
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.deemo.idle;
 				PRODUCT_NAME = Idle;
+				SWIFT_OBJC_BRIDGING_HEADER = "idle-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

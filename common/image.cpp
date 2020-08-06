@@ -1,7 +1,9 @@
 #include "game.h"
 #include "image.h"
-#include <png.h>
+#include "png.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #ifdef __ANDROID__
@@ -38,6 +40,8 @@ RawImageData getImage(const char* filename) {
 
   png_read_end(png_ptr, info_ptr);
   png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+    
+  printf("%s", img.data);
 
   return (RawImageData) {
     (int)png_info.width,
