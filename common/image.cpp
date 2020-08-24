@@ -13,24 +13,17 @@
 #include <OpenGLES/ES2/gl.h>
 #endif
 
-//  FileData img = getAsset("image/pngtest.png");
-//  png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-//  png_infop info_ptr = png_create_info_struct(png_ptr);
-//  assert(info_ptr != nullptr);
-//  assert(imglen != 1);
-//  ReadDataHandle png_data_handle = (ReadDataHandle) {{(const png_byte*)img.data, (png_size_t)img.size}, 0};
-//  png_set_read_fn(png_ptr, &png_data_handle, NULL);
-//  png_read_end(png_ptr, info_ptr);
-//  png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
 static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop info_ptr);
 static PngHandle read_entire_png_image(const png_structp png_ptr, const png_infop info_ptr, const png_uint_32 height);
 static GLenum get_gl_color_format(const int png_color_format);
 
 RawImageData getImage(const char* filename) {
-  FileData img = getAsset(filename); // TODO: RELEASE THIS ASSET
+  FileData img = getAsset(filename);
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   png_infop info_ptr = png_create_info_struct(png_ptr);
+    
+  png_set_interlace_handling(png_ptr);
 
   ReadDataHandle png_data_handle = (ReadDataHandle) {{(const png_byte*)img.data, (png_size_t)img.size}, 0};
   png_set_read_fn(png_ptr, &png_data_handle, read_png_data_callback);
@@ -42,6 +35,8 @@ RawImageData getImage(const char* filename) {
   png_destroy_read_struct(&png_ptr, &info_ptr, 0);
     
   printf("%s", img.data);
+    
+  freeAsset(img); // NOT TESTED
 
   return (RawImageData) {
     (int)png_info.width,
@@ -143,8 +138,10 @@ GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type,
   glGenTextures(1, &textureId);
 
   glBindTexture(GL_TEXTURE_2D, textureId);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, GL_UNSIGNED_BYTE, pixels);
   glGenerateMipmap(GL_TEXTURE_2D);
 

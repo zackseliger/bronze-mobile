@@ -57,16 +57,6 @@ FileData getAsset(const char* filename) {
   AAsset* asset = AAssetManager_open(assetManager, filename, AASSET_MODE_STREAMING);
   assert(asset != nullptr);
 
-//  FILE* stream = fopen(path, "r");
-//  assert (stream != NULL);
-//
-//  fseek(stream, 0, SEEK_END);
-//  long stream_size = ftell(stream);
-//  fseek(stream, 0, SEEK_SET);
-//
-//  void* buffer = malloc(stream_size);
-//  fread(buffer, stream_size, 1, stream); // TODO: put this in
-
   return (FileData){AAsset_getLength(asset), AAsset_getBuffer(asset), asset};
 }
 void freeAsset(FileData data) {
@@ -85,7 +75,6 @@ GLuint buildShader(GLenum type, const char* shaderSrc) {
   // Create the shader object
   shader = glCreateShader(type);
   // Load the shader source
-  LOG(shaderSrc);
   glShaderSource(shader, 1, &shaderSrc, nullptr);
   // Compile the shader
   glCompileShader(shader);
@@ -208,7 +197,7 @@ void glRender() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glDisableVertexAttribArray(p_posLoc);
   glDisableVertexAttribArray(p_texCoord);
-  
+
   // draw triangle
   GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200,};
   glUseProgram(colorProgram);
