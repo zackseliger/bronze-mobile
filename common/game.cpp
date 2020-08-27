@@ -25,6 +25,7 @@ GLuint colorProgram;
 GLint c_uProjLoc;
 GLint c_uCamLoc;
 GLint c_posLoc;
+GLint c_color;
 
 GLuint textureProgram;
 GLint p_uProjLoc;
@@ -38,10 +39,6 @@ GLuint p_buffer;
 float topX = 0;
 float topY = -100;
 GLint textureId;
-static const float rect[] = {-200.0f,-200.0f, 0.0f, 0.0f,
-                             -200.0f, 000.0f, 0.0f, 1.0f,
-                             000.0f, -200.0f, 1.0f, 0.0f,
-                             000.0f,  000.0f, 1.0f, 1.0f};
 
 // utilities
 void LOG(const char* message) {
@@ -57,10 +54,17 @@ FileData getAsset(const char* filename) {
   AAsset* asset = AAssetManager_open(assetManager, filename, AASSET_MODE_STREAMING);
   assert(asset != nullptr);
 
-  return (FileData){AAsset_getLength(asset), AAsset_getBuffer(asset), asset};
+  // read file, manually adding EOF
+  long size = AAsset_getLength(asset);
+  void* buffer = malloc(size+1);
+  AAsset_read(asset, buffer, size);
+  ((char*)buffer)[size] = 0;
+
+  return (FileData){size+1, buffer, asset};
 }
-void freeAsset(FileData data) {
-    AAsset_close((AAsset*)data.handle);
+void freeAsset(FileData asset) {
+    AAsset_close((AAsset*)asset.handle);
+    free((void*)asset.data);
 }
 void initAssetManager(AAssetManager* manager) {
   assetManager = manager;
@@ -68,13 +72,14 @@ void initAssetManager(AAssetManager* manager) {
 // Apple implementation is in AssetsUtils.mm
 #endif
 
-GLuint buildShader(GLenum type, const char* shaderSrc) {
+GLuint buildShader(GLenum type, const GLchar* shaderSrc) {
   GLuint shader;
   GLint compiled;
 
   // Create the shader object
   shader = glCreateShader(type);
   // Load the shader source
+  LOG(shaderSrc);
   glShaderSource(shader, 1, &shaderSrc, nullptr);
   // Compile the shader
   glCompileShader(shader);
@@ -148,6 +153,7 @@ void glSetup(double width, double height) {
   c_posLoc = glGetAttribLocation(colorProgram, "vPosition");
   c_uProjLoc = glGetUniformLocation(colorProgram, "uProj");
   c_uCamLoc = glGetUniformLocation(colorProgram, "uCam");
+  c_color = glGetAttribLocation(colorProgram, "aColor");
 
   // texture program
   textureProgram = buildProgram("shaders/texture.vsh", "shaders/texture.fsh");
@@ -176,7 +182,7 @@ void glSetup(double width, double height) {
   RawImageData imageData = getImage((const char*)"image/pngtest.png");
   textureId = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
   releaseImage(&imageData);
-  p_buffer = createVbo(sizeof(rect), rect, GL_STATIC_DRAW);
+  // p_buffer = createVbo(sizeof(rect), rect, GL_STATIC_DRAW);
 }
 
 void glRender() {
@@ -184,13 +190,15 @@ void glRender() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // draw texture
+  GLfloat positions[] = {-200.0f, -200.0f, -200.0f, 0.0f, 0.0f, -200.0f, 0.0f, 0.0f};
+  GLfloat uvCoords[] = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+
   glUseProgram(textureProgram);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, textureId);
   glUniform1i(p_texLoc, 0);
-  glBindBuffer(GL_ARRAY_BUFFER, p_buffer);
-  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE,4 * sizeof(GL_FLOAT), BUFFER_OFFSET(0));
-  glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE,4 * sizeof(GL_FLOAT), BUFFER_OFFSET(2 * sizeof(GL_FLOAT)));
+  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 0,  positions);
+  glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
   glEnableVertexAttribArray(p_posLoc);
   glEnableVertexAttribArray(p_texCoord);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -199,12 +207,16 @@ void glRender() {
   glDisableVertexAttribArray(p_texCoord);
 
   // draw triangle
-  GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200,};
+  GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200};
+  GLfloat colors[] = {1.0,0.0,0.0, 0.5,0.5,0.5, 0.5,0.5,0.5, 0.6,0.6,0.3};
   glUseProgram(colorProgram);
   glVertexAttribPointer(c_posLoc, 2, GL_FLOAT, GL_FALSE, 0, verticies);
+  glVertexAttribPointer(c_color, 3, GL_FLOAT, GL_FALSE, 0, colors);
   glEnableVertexAttribArray(c_posLoc);
+  glEnableVertexAttribArray(c_color);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glDisableVertexAttribArray(c_posLoc);
+  glDisableVertexAttribArray(c_color);
 }
 
 // input events
