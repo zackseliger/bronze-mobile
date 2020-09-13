@@ -2,10 +2,12 @@
 #include "image.h"
 #include <fstream>
 #include <string>
-#include "png.h"
+#include <png.h>
 #include <vector>
 
-#define BUFFER_OFFSET(i) ((void*)(i))
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include <freetype-gl.h>
 
 #ifdef __ANDROID__
 #include <android/log.h>
@@ -33,12 +35,18 @@ GLint p_uCamLoc;
 GLint p_posLoc;
 GLint p_texLoc;
 GLint p_texCoord;
-GLuint p_buffer;
+GLuint p_color;
 
 // stuff that's just there
 float topX = 0;
 float topY = -100;
 GLint textureId;
+
+// freetype stuff
+FT_Library library;
+FT_Face face;
+ftgl::texture_atlas_t* texAtlas;
+ftgl::texture_font_t* texFont;
 
 // utilities
 void LOG(const char* message) {
@@ -79,7 +87,6 @@ GLuint buildShader(GLenum type, const GLchar* shaderSrc) {
   // Create the shader object
   shader = glCreateShader(type);
   // Load the shader source
-  LOG(shaderSrc);
   glShaderSource(shader, 1, &shaderSrc, nullptr);
   // Compile the shader
   glCompileShader(shader);
@@ -162,6 +169,7 @@ void glSetup(double width, double height) {
   p_uCamLoc = glGetUniformLocation(textureProgram, "uCam");
   p_texLoc = glGetUniformLocation(textureProgram, "uTextureUnit");
   p_texCoord = glGetAttribLocation(textureProgram, "aTextureCoordinates");
+  p_color = glGetUniformLocation(textureProgram, "uColor");
 
   // enable transparency
   glEnable(GL_BLEND);
@@ -182,7 +190,102 @@ void glSetup(double width, double height) {
   RawImageData imageData = getImage((const char*)"image/pngtest.png");
   textureId = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
   releaseImage(&imageData);
-  // p_buffer = createVbo(sizeof(rect), rect, GL_STATIC_DRAW);
+
+  //setup freetype-gl
+  FileData font = getAsset("Poetsen.ttf");//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
+  texAtlas = ftgl::texture_atlas_new(512, 512, 1);
+  texFont = ftgl::texture_font_new_from_memory(texAtlas, 32, font.data, font.size);
+//  freeAsset(font);
+}
+
+void drawText(const char* text, float r, float g, float b) {
+  GLfloat verticies[24*strlen(text)]; // 24 floats per char
+  float currx = 0.0; // text goes to the right
+  
+  // add in each character to verticies
+  bool reload = false;
+  for (int i = 0; i < strlen(text); i++) {
+    // if glyph isn't already loaded, we need to update our font texture atlas
+    if (!texture_font_find_glyph(texFont, (const char*)&text[i])) {
+      reload = true;
+    }
+    
+    // get glyph
+    const char test[2] = {text[i]};
+    ftgl::texture_glyph_t* glyph = ftgl::texture_font_get_glyph(texFont, test);
+    
+    // set up varticies
+    float x0 = currx + -150.0f + glyph->offset_x;
+    float y0 = -300.0f - glyph->offset_y;
+    float x1 = x0 + glyph->width;
+    float y1 = y0 + glyph->height;
+    float u0 = glyph->s0;
+    float v0 = glyph->t0;
+    float u1 = glyph->s1;
+    float v1 = glyph->t1;
+    
+    verticies[i*24 + 0] = x0;
+    verticies[i*24 + 1] = y0;
+    verticies[i*24 + 2] = u0;
+    verticies[i*24 + 3] = v0;
+    
+    verticies[i*24 + 4] = x0;
+    verticies[i*24 + 5] = y1;
+    verticies[i*24 + 6] = u0;
+    verticies[i*24 + 7] = v1;
+    
+    verticies[i*24 + 8] = x1;
+    verticies[i*24 + 9] = y0;
+    verticies[i*24 + 10] = u1;
+    verticies[i*24 + 11] = v0;
+    
+    verticies[i*24 + 12] = x1;
+    verticies[i*24 + 13] = y1;
+    verticies[i*24 + 14] = u1;
+    verticies[i*24 + 15] = v1;
+    
+    verticies[i*24 + 16] = x0;
+    verticies[i*24 + 17] = y1;
+    verticies[i*24 + 18] = u0;
+    verticies[i*24 + 19] = v1;
+    
+    verticies[i*24 + 20] = x1;
+    verticies[i*24 + 21] = y0;
+    verticies[i*24 + 22] = u1;
+    verticies[i*24 + 23] = v0;
+    
+    currx += glyph->advance_x;
+  }
+  
+  if (reload) {
+    texAtlas->id = loadTexture(texAtlas->width, texAtlas->height, GL_ALPHA, texAtlas->data);
+  }
+  
+  // render verticies
+  GLuint bufferLoc;
+  glGenBuffers(1, &bufferLoc);
+  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  
+  glUseProgram(textureProgram);
+  glUniform4f(p_color, r, g, b, 0.0); // color
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texAtlas->id);
+  glUniform1i(p_texLoc, 0);
+  
+  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
+  glEnableVertexAttribArray(p_posLoc);
+  glEnableVertexAttribArray(p_texCoord);
+  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+  glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (const void*)8);
+  
+  glDrawArrays(GL_TRIANGLES, 0, strlen(text)*6);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  
+  glDisableVertexAttribArray(p_posLoc);
+  glDisableVertexAttribArray(p_texCoord);
+  glUniform4f(p_color, 0.0, 0.0, 0.0, 0.0);// reset color
 }
 
 void glRender() {
@@ -190,12 +293,12 @@ void glRender() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // draw texture
-  GLfloat positions[] = {-200.0f, -200.0f, -200.0f, 0.0f, 0.0f, -200.0f, 0.0f, 0.0f};
+  GLfloat positions[] = {-100.0f, -200.0f, -100.0f, 0.0f, 100.0f, -200.0f, 100.0f, 0.0f};
   GLfloat uvCoords[] = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
   glUseProgram(textureProgram);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, textureId);
+  glBindTexture(GL_TEXTURE_2D, texAtlas->id); // textureId
   glUniform1i(p_texLoc, 0);
   glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 0,  positions);
   glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
@@ -217,6 +320,39 @@ void glRender() {
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glDisableVertexAttribArray(c_posLoc);
   glDisableVertexAttribArray(c_color);
+  
+  // draw texture 2
+  GLfloat verticies2[] = {
+    -100.0f, 100.0f, 0.0f, 0.0f,//left, top, bottom-left
+    -100.0f, 300.0f, 0.0f, 1.0f,//left, bottom, top-left
+     100.0f, 100.0f, 1.0f, 0.0f,//right, top, bottom-right
+    
+     100.0f, 300.0f, 1.0f, 1.0f,//right, bottom, top-right
+    -100.0f, 300.0f, 0.0f, 1.0f,//left, bottom, top-left
+     100.0f, 100.0f, 1.0f, 0.0f//right, top, bottom-right
+  };
+
+  GLuint bufferLoc;
+  glGenBuffers(1, &bufferLoc);
+  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies2), verticies2, GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glUseProgram(textureProgram);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, textureId);
+  glUniform1i(p_texLoc, 0);
+  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
+  glEnableVertexAttribArray(p_posLoc);
+  glEnableVertexAttribArray(p_texCoord);
+  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+  glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (const void*)8);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glDisableVertexAttribArray(p_posLoc);
+  glDisableVertexAttribArray(p_texCoord);
+  
+  // draw text
+  drawText("Hello world. I am here!", 0.8, 0.2, 0.2);
 }
 
 // input events

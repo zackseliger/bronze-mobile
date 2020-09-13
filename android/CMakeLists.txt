@@ -31,14 +31,71 @@ add_library(png STATIC ${PNG_SOURCES})
 target_link_libraries(png libz)
 target_include_directories(png PRIVATE ../lib/libpng)
 
+# FreeType
+set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
+add_definitions(-DFT2_BUILD_LIBRARY)
+#AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/freetype FREETYPE_SOURCES)
+add_library(freetype
+        ../lib/freetype/src/winfonts/winfnt.c
+        ../lib/freetype/src/type42/type42.c
+        ../lib/freetype/src/type1/type1.c
+        ../lib/freetype/src/truetype/truetype.c
+        ../lib/freetype/src/smooth/smooth.c
+        ../lib/freetype/src/sfnt/sfnt.c
+        ../lib/freetype/src/raster/raster.c
+        ../lib/freetype/src/psnames/psnames.c
+        ../lib/freetype/src/pshinter/pshinter.c
+        ../lib/freetype/src/psaux/psaux.c
+        ../lib/freetype/src/pfr/pfr.c
+        ../lib/freetype/src/pcf/pcf.c
+        ../lib/freetype/src/lzw/ftlzw.c
+        ../lib/freetype/src/gzip/ftgzip.c
+        ../lib/freetype/src/cid/type1cid.c
+        ../lib/freetype/src/cff/cff.c
+        ../lib/freetype/src/cache/ftcache.c
+        ../lib/freetype/src/bzip2/ftbzip2.c
+        ../lib/freetype/src/bdf/bdf.c
+        ../lib/freetype/src/base/ftglyph.c
+        ../lib/freetype/src/base/ftgxval.c
+        ../lib/freetype/src/base/ftinit.c
+        ../lib/freetype/src/base/ftmm.c
+        ../lib/freetype/src/base/ftotval.c
+        ../lib/freetype/src/base/ftpatent.c
+        ../lib/freetype/src/base/ftpfr.c
+        ../lib/freetype/src/base/ftstroke.c
+        ../lib/freetype/src/base/ftsynth.c
+        ../lib/freetype/src/base/fttype1.c
+        ../lib/freetype/src/base/ftwinfnt.c
+        ../lib/freetype/src/base/ftbbox.c
+        ../lib/freetype/src/base/ftbdf.c
+        ../lib/freetype/src/base/ftbitmap.c
+        ../lib/freetype/src/base/ftcid.c
+        ../lib/freetype/src/base/ftdebug.c
+        ../lib/freetype/src/base/ftfstype.c
+        ../lib/freetype/src/base/ftgasp.c
+        ../lib/freetype/src/base/ftbase.c
+        ../lib/freetype/src/base/ftsystem.c
+        ../lib/freetype/src/autofit/autofit.c)
+target_link_libraries(freetype libz)
+target_include_directories(freetype PRIVATE ../lib/freetype/include)
+
+# Freetype-GL
+set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/freetypeGL FREETYPE_GL_SOURCES)
+add_library(freetypeGL STATIC ${FREETYPE_GL_SOURCES})
+target_link_libraries(freetypeGL freetype)
+target_include_directories(freetypeGL PRIVATE ../lib/freetypeGL ../lib/freetype/include)
+
 # build common game files as a static lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common GAME_SOURCES) # all source files in common/
 add_library(game_common STATIC ${GAME_SOURCES})
 # lib dependencies
-target_link_libraries(game_common GLESv2 png)
+target_link_libraries(game_common GLESv2 png freetype freetypeGL)
 # includes
 target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/libpng)
+target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
+target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/freetypeGL)
 target_include_directories(game_common PUBLIC ${PARENT_DIR}/common)
 
 # build native_app_glue as a static lib
