@@ -4,10 +4,18 @@
 #include <string>
 #include <png.h>
 #include <vector>
+#include <iostream>
+#include <stdio.h>
 
+//text
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <freetype-gl.h>
+
+//audio
+#include <sndfile.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 
 #ifdef __ANDROID__
 #include <android/log.h>
@@ -154,6 +162,159 @@ GLuint buildProgram(const char* vertexShaderPath, const char* fragmentShaderPath
   return programId;
 }
 
+class STREAM_DATA {
+public:
+    STREAM_DATA(FileData);
+    FileData asset;
+    sf_count_t offset;
+};
+STREAM_DATA::STREAM_DATA(FileData fd) : asset(fd) {
+  STREAM_DATA::offset = 0;
+}
+
+static sf_count_t stream_len(void *stream) {
+  STREAM_DATA *vf = (STREAM_DATA *)stream;
+  return (sf_count_t)vf->asset.size;
+} // stream_len
+
+static sf_count_t stream_seek(sf_count_t offset, int whence, void *stream) {
+  STREAM_DATA *vf = (STREAM_DATA *)stream;
+
+  switch (whence)
+  {
+    case SEEK_SET:
+      vf->offset = offset;
+          break;
+
+    case SEEK_CUR:
+      vf->offset = vf->offset + offset;
+          break;
+
+    case SEEK_END:
+      vf->offset = vf->asset.size + offset;
+          break;
+    default:
+      break;
+  };
+
+  return vf->offset;
+} // stream_seek
+
+static sf_count_t stream_read(void *ptr, sf_count_t count, void *stream) {
+  STREAM_DATA *vf = (STREAM_DATA *)stream;
+
+  // don't read more than there is
+  if (vf->offset + count > vf->asset.size)
+    count = vf->asset.size - vf->offset;
+
+//  vf->data.seekg(vf->offset);
+//  unsigned char a[16 * 1024];
+  memcpy( ptr, &((char*)vf->asset.data)[vf->offset], count);
+//  vf->data.read(reinterpret_cast<unsigned char*>(&a), count);
+//  memcpy(ptr, &a, count);
+  vf->offset += count;
+
+//  char buf[256];
+//  sprintf(buf, "Requested %d chars: %s", (int)count, (char*)ptr);
+//  LOG((const char*)buf);
+
+  return count;
+} // stream_read
+
+static sf_count_t stream_tell(void *stream) {
+  STREAM_DATA *vf = (STREAM_DATA *)stream;
+//  std::cout << "  stream_tell used" << std::endl;
+
+  return vf->offset;
+} // stream_tell
+
+static ALuint loadSound(const char *filename) {
+  ALenum err, format;
+  ALuint buffer;
+  SNDFILE *sndfile;
+  SF_INFO sfinfo;
+  SF_VIRTUAL_IO sfvirtual;
+  short *membuf;
+  sf_count_t num_frames;
+  ALsizei num_bytes;
+
+  /* Open the audio file and check that it's usable. */
+  STREAM_DATA stream(getAsset(filename));
+//  sfinfo.format = 0;
+
+  sfvirtual.get_filelen = stream_len;
+  sfvirtual.read = stream_read;
+  sfvirtual.seek = stream_seek;
+  sfvirtual.tell = stream_tell;
+//  sndfile = sf_open(filename, SFM_READ, &sfinfo);
+
+  //  sf_open_virtual(SF_VIRTUAL_IO* sfvirtual, int mode, SF_INFO* sfinfo, void* data)
+  sndfile = sf_open_virtual(&sfvirtual, SFM_READ, &sfinfo, &stream);
+  if(!sndfile)
+  {
+//    fprintf(stderr, "Could not open audio in %s: %s\n", filename, sf_strerror(sndfile));
+    LOG("Couldn't open audio file");
+    return 0;
+  }
+  if(sfinfo.frames < 1 || sfinfo.frames > (sf_count_t)(INT_MAX/sizeof(short))/sfinfo.channels)
+  {
+//    fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filename, sfinfo.frames);
+    LOG("Bad sample count");
+    sf_close(sndfile);
+    return 0;
+  }
+
+  /* Get the sound format, and figure out the OpenAL format */
+  if(sfinfo.channels == 1)
+    format = AL_FORMAT_MONO16;
+  else if(sfinfo.channels == 2)
+    format = AL_FORMAT_STEREO16;
+  else
+  {
+//    fprintf(stderr, "Unsupported channel count: %d\n", sfinfo.channels);
+    LOG("Unsupported channel count");
+    sf_close(sndfile);
+    return 0;
+  }
+
+  /* Decode the whole audio file to a buffer. */
+  membuf = (short*)malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short));
+
+  num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
+  if(num_frames < 1)
+  {
+    free(membuf);
+    sf_close(sndfile);
+//    fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filename, num_frames);
+    LOG("Failed to read samples");
+    return 0;
+  }
+  num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
+
+  /* Buffer the audio data into a new buffer object, then free the data and
+   * close the file.
+   */
+  buffer = 0;
+  alGenBuffers(1, &buffer);
+  alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
+
+  free(membuf);
+  sf_close(sndfile);
+
+  /* Check if an error occured, and clean up if so. */
+  err = alGetError();
+  if(err != AL_NO_ERROR)
+  {
+//    fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
+    LOG("OpenAL Error");
+    if(buffer && alIsBuffer(buffer))
+      alDeleteBuffers(1, &buffer);
+    return 0;
+  }
+
+  return buffer;
+}
+
 void glSetup(double width, double height) {
   // color program
   colorProgram = buildProgram("shaders/color.vsh", "shaders/color.fsh");
@@ -196,6 +357,21 @@ void glSetup(double width, double height) {
   texAtlas = ftgl::texture_atlas_new(512, 512, 1);
   texFont = ftgl::texture_font_new_from_memory(texAtlas, 32, font.data, font.size);
 //  freeAsset(font);
+
+  //audio
+  ALCdevice *device = alcOpenDevice(NULL);
+  if (!device) LOG("COULDN'T OPEN AUDIO DEVICE!!");
+  ALCcontext *context = alcCreateContext(device, NULL);
+  if (!context) LOG("COULDN'T OPEN AUDIO CONTEXT");
+  if (alcMakeContextCurrent(context) == ALC_FALSE) LOG("CONTEXT COULDN'T BE MADE CURRENT");
+
+  ALuint buffer = loadSound("wavtest.wav");
+  ALuint source;
+  alGenSources(1, &source);
+  alSourcei(source, AL_BUFFER, (ALint)buffer);
+  assert(alGetError()==AL_NO_ERROR && "Failed to open audio source");
+
+  alSourcePlay(source);
 }
 
 void drawText(const char* text, float r, float g, float b) {
