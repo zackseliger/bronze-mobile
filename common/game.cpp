@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <stdio.h>
+#include <map>
 
 //text
 #include <ft2build.h>
@@ -48,20 +49,35 @@ GLuint p_color;
 // stuff that's just there
 float topX = 0;
 float topY = -100;
-GLint textureId;
 
 // freetype stuff
 ftgl::texture_atlas_t* texAtlas;
 ftgl::texture_font_t* texFont;
 
+// sound map
+std::map<const char*, ALuint> sounds;
+// texture map
+std::map<const char*, GLuint> textures;
+
 // utilities
-void LOG(const char* message) {
+void _LOG(const char *fmt, ...) __attribute__((format (printf, 1, 2)));
+#define LOG(fmt, ...) _LOG(fmt, ##__VA_ARGS__)
+void _LOG(const char *fmt, ...) {
+  va_list arg;
+  char* buffer = 0;
+
+  /* Write the error message */
+  va_start(arg, fmt);
+  vsprintf(buffer, fmt, arg);
+  va_end(arg);
+
   #ifdef __ANDROID__
-  ALOG("%s", message);
+  ALOG("%s", buffer);
   #elif __APPLE__
-  printf("%s\n", message);
+  printf("%s\n", buffer);
   #endif
 }
+
 #ifdef __ANDROID__
 AAssetManager* assetManager;
 FileData getAsset(const char* filename) {
@@ -108,7 +124,7 @@ GLuint buildShader(GLenum type, const GLchar* shaderSrc) {
     const char* errorLog = (const char*)malloc(maxLength);
     glGetShaderInfoLog(shader, maxLength, &maxLength, (GLchar*)errorLog);
     LOG("COULDN'T COMPILE SHADER:");
-    LOG(errorLog);
+    LOG("%s", errorLog);
     free((void*)errorLog);
 
     glDeleteShader(shader);
@@ -147,7 +163,7 @@ GLuint buildProgram(const char* vertexShaderPath, const char* fragmentShaderPath
     const char* errorLog = (const char*)malloc(maxLength);
     glGetProgramInfoLog(programId, maxLength, &maxLength, (GLchar*)errorLog);
     LOG("COULDN'T LINK PROGRAM:");
-    LOG(errorLog);
+    LOG("%s", errorLog);
     free((void*)errorLog);
 
     // delete stuff and return 0
@@ -173,7 +189,7 @@ STREAM_DATA::STREAM_DATA(FileData fd) : asset(fd) {
 static sf_count_t stream_len(void *stream) {
   STREAM_DATA *vf = (STREAM_DATA *)stream;
   return (sf_count_t)vf->asset.size;
-} // stream_len
+}
 
 static sf_count_t stream_seek(sf_count_t offset, int whence, void *stream) {
   STREAM_DATA *vf = (STREAM_DATA *)stream;
@@ -205,30 +221,20 @@ static sf_count_t stream_read(void *ptr, sf_count_t count, void *stream) {
   if (vf->offset + count > vf->asset.size)
     count = vf->asset.size - vf->offset;
 
-//  vf->data.seekg(vf->offset);
-//  unsigned char a[16 * 1024];
+  // copy info from asset to ptr
   memcpy( ptr, &((char*)vf->asset.data)[vf->offset], count);
-//  vf->data.read(reinterpret_cast<unsigned char*>(&a), count);
-//  memcpy(ptr, &a, count);
   vf->offset += count;
 
-//  char buf[256];
-//  sprintf(buf, "Requested %d chars: %s", (int)count, (char*)ptr);
-//  LOG((const char*)buf);
-
   return count;
-} // stream_read
+}
 
 static sf_count_t stream_tell(void *stream) {
   STREAM_DATA *vf = (STREAM_DATA *)stream;
-//  std::cout << "  stream_tell used" << std::endl;
-
   return vf->offset;
-} // stream_tell
+}
 
-static ALuint loadSound(const char *filename) {
+ALuint loadSound(const char* filename, const char* name) {
   ALenum err, format;
-  ALuint buffer;
   SNDFILE *sndfile;
   SF_INFO sfinfo;
   SF_VIRTUAL_IO sfvirtual;
@@ -237,25 +243,22 @@ static ALuint loadSound(const char *filename) {
   ALsizei num_bytes;
 
   /* Open the audio file and check that it's usable. */
-  STREAM_DATA stream(getAsset(filename));
+  FileData fileData = getAsset(filename);
+  STREAM_DATA stream(fileData);
 //  sfinfo.format = 0;
 
   sfvirtual.get_filelen = stream_len;
   sfvirtual.read = stream_read;
   sfvirtual.seek = stream_seek;
   sfvirtual.tell = stream_tell;
-//  sndfile = sf_open(filename, SFM_READ, &sfinfo);
 
-  //  sf_open_virtual(SF_VIRTUAL_IO* sfvirtual, int mode, SF_INFO* sfinfo, void* data)
   sndfile = sf_open_virtual(&sfvirtual, SFM_READ, &sfinfo, &stream);
-  if(!sndfile)
-  {
+  if(!sndfile) {
 //    fprintf(stderr, "Could not open audio in %s: %s\n", filename, sf_strerror(sndfile));
     LOG("Couldn't open audio file");
     return 0;
   }
-  if(sfinfo.frames < 1 || sfinfo.frames > (sf_count_t)(INT_MAX/sizeof(short))/sfinfo.channels)
-  {
+  if(sfinfo.frames < 1 || sfinfo.frames > (sf_count_t)(INT_MAX / sizeof(short)) / sfinfo.channels) {
 //    fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filename, sfinfo.frames);
     LOG("Bad sample count");
     sf_close(sndfile);
@@ -292,12 +295,14 @@ static ALuint loadSound(const char *filename) {
   /* Buffer the audio data into a new buffer object, then free the data and
    * close the file.
    */
-  buffer = 0;
+  ALuint buffer = 0;
   alGenBuffers(1, &buffer);
   alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
 
+  // free memory
   free(membuf);
   sf_close(sndfile);
+  freeAsset(fileData);
 
   /* Check if an error occured, and clean up if so. */
   err = alGetError();
@@ -309,8 +314,47 @@ static ALuint loadSound(const char *filename) {
       alDeleteBuffers(1, &buffer);
     return 0;
   }
+  
+  // put buffer in sounds map
+  sounds[name] = buffer;
 
   return buffer;
+}
+
+void playSound(const char* name) {
+  std::map<const char*, ALuint>::iterator it;
+  ALuint soundBuffer;
+  
+  it = sounds.find(name);
+  if (it == sounds.end()) {
+    LOG("COULDN'T FIND SOUND");
+    return;
+  }
+  
+  soundBuffer = it->second;
+  alSourcePlay(soundBuffer);
+}
+
+GLuint loadImage(const char* filename, const char* name) {
+  RawImageData imageData = getImageData(filename);
+  GLuint buffer = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
+  releaseImage(&imageData);
+  
+  textures[name] = buffer;
+  
+  return buffer;
+}
+
+GLuint getImage(const char* name) {
+  std::map<const char*, GLuint>::iterator it;
+  
+  it = textures.find(name);
+  if (it == textures.end()) {
+    LOG("COULDN'T FIND TEXTURE");
+    return 0;
+  }
+  
+  return it->second;
 }
 
 void glSetup(double width, double height) {
@@ -346,9 +390,7 @@ void glSetup(double width, double height) {
   glUniformMatrix4fv(c_uCamLoc, 1, GL_FALSE, initCamMat);
 
   // setup image
-  RawImageData imageData = getImage((const char*)"image/pngtest.png");
-  textureId = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
-  releaseImage(&imageData);
+  loadImage("image/pngtest.png", "testImage");
 
   //setup freetype-gl
   FileData font = getAsset("Poetsen.ttf");//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
@@ -363,13 +405,13 @@ void glSetup(double width, double height) {
   if (!context) LOG("COULDN'T OPEN AUDIO CONTEXT");
   if (alcMakeContextCurrent(context) == ALC_FALSE) LOG("CONTEXT COULDN'T BE MADE CURRENT");
 
-  ALuint buffer = loadSound("wavtest.wav");
+  ALuint buffer = loadSound("audio/wavtest.wav", "test");
   ALuint source;
   alGenSources(1, &source);
   alSourcei(source, AL_BUFFER, (ALint)buffer);
   assert(alGetError()==AL_NO_ERROR && "Failed to open audio source");
 
-  alSourcePlay(source);
+  playSound("test");
 }
 
 void drawText(const char* text, float x, float y, float r, float g, float b) {
@@ -515,11 +557,11 @@ void glRender() {
   glDisableVertexAttribArray(c_color);
   
   // draw texture 2
-  drawImage(textureId, -100, 100, 200, 200);
+  drawImage(getImage("testImage"), -100, 100, 200, 200);
   
   // draw text
-  drawText("Hello world. I am here!", -150, -350, 0.8, 0.2, 0.2);
-  drawRect(-150,-350, 10, 10);
+  drawText("Hello world. I am here!", -150, -250, 0.8, 0.2, 0.2);
+  drawRect(-150,-250, 10, 10);
 }
 
 // input events

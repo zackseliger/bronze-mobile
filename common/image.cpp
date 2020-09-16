@@ -18,7 +18,7 @@ static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop i
 static PngHandle read_entire_png_image(const png_structp png_ptr, const png_infop info_ptr, const png_uint_32 height);
 static GLenum get_gl_color_format(const int png_color_format);
 
-RawImageData getImage(const char* filename) {
+RawImageData getImageData(const char* filename) {
   FileData img = getAsset(filename);
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   png_infop info_ptr = png_create_info_struct(png_ptr);

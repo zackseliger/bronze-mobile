@@ -34,7 +34,7 @@ typedef struct {
     const void* data;
 } RawImageData;
 
-RawImageData getImage(const char*);
+RawImageData getImageData(const char*);
 void releaseImage(const RawImageData* data);
 GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type, const GLvoid* pixels);
 
