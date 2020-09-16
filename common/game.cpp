@@ -51,8 +51,6 @@ float topY = -100;
 GLint textureId;
 
 // freetype stuff
-FT_Library library;
-FT_Face face;
 ftgl::texture_atlas_t* texAtlas;
 ftgl::texture_font_t* texFont;
 
@@ -374,7 +372,7 @@ void glSetup(double width, double height) {
   alSourcePlay(source);
 }
 
-void drawText(const char* text, float r, float g, float b) {
+void drawText(const char* text, float x, float y, float r, float g, float b) {
   GLfloat verticies[24*strlen(text)]; // 24 floats per char
   float currx = 0.0; // text goes to the right
   
@@ -391,8 +389,8 @@ void drawText(const char* text, float r, float g, float b) {
     ftgl::texture_glyph_t* glyph = ftgl::texture_font_get_glyph(texFont, test);
     
     // set up varticies
-    float x0 = currx + -150.0f + glyph->offset_x;
-    float y0 = -300.0f - glyph->offset_y;
+    float x0 = currx + x + glyph->offset_x;
+    float y0 = y - glyph->offset_y;
     float x1 = x0 + glyph->width;
     float y1 = y0 + glyph->height;
     float u0 = glyph->s0;
@@ -464,19 +462,16 @@ void drawText(const char* text, float r, float g, float b) {
   glUniform4f(p_color, 0.0, 0.0, 0.0, 0.0);// reset color
 }
 
-void glRender() {
-  glClearColor(0.2, 0.1, 0.9, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // draw texture
-  GLfloat positions[] = {-100.0f, -200.0f, -100.0f, 0.0f, 100.0f, -200.0f, 100.0f, 0.0f};
-  GLfloat uvCoords[] = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
-
+void drawImage(GLuint tex, float x, float y, float width, float height) {
+  GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
+  GLfloat uvCoords[] = {0.0f,0.0f, 0.0f,1.0f, 1.0f,0.0f, 1.0f,1.0f};
+  
   glUseProgram(textureProgram);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texAtlas->id); // textureId
+  
+  glBindTexture(GL_TEXTURE_2D, tex);
   glUniform1i(p_texLoc, 0);
-  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 0,  positions);
+  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 0, positions);
   glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
   glEnableVertexAttribArray(p_posLoc);
   glEnableVertexAttribArray(p_texCoord);
@@ -484,6 +479,28 @@ void glRender() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glDisableVertexAttribArray(p_posLoc);
   glDisableVertexAttribArray(p_texCoord);
+}
+
+void drawRect(float x, float y, float width, float height) {
+  GLfloat verticies[] = {x,y, x,y+height, x+width,y, x+width,y+height};
+  GLfloat colors[] = {0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,0.0,0.0};
+  
+  glUseProgram(colorProgram);
+  glVertexAttribPointer(c_posLoc, 2, GL_FLOAT, GL_FALSE, 0, verticies);
+  glVertexAttribPointer(c_color, 3, GL_FLOAT, GL_FALSE, 0, colors);
+  glEnableVertexAttribArray(c_posLoc);
+  glEnableVertexAttribArray(c_color);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableVertexAttribArray(c_posLoc);
+  glDisableVertexAttribArray(c_color);
+}
+
+void glRender() {
+  glClearColor(0.2, 0.1, 0.9, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // draw texture
+  drawImage(texAtlas->id, -100, -200, 200, 200);
 
   // draw triangle
   GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200};
@@ -498,37 +515,11 @@ void glRender() {
   glDisableVertexAttribArray(c_color);
   
   // draw texture 2
-  GLfloat verticies2[] = {
-    -100.0f, 100.0f, 0.0f, 0.0f,//left, top, bottom-left
-    -100.0f, 300.0f, 0.0f, 1.0f,//left, bottom, top-left
-     100.0f, 100.0f, 1.0f, 0.0f,//right, top, bottom-right
-    
-     100.0f, 300.0f, 1.0f, 1.0f,//right, bottom, top-right
-    -100.0f, 300.0f, 0.0f, 1.0f,//left, bottom, top-left
-     100.0f, 100.0f, 1.0f, 0.0f//right, top, bottom-right
-  };
-
-  GLuint bufferLoc;
-  glGenBuffers(1, &bufferLoc);
-  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(verticies2), verticies2, GL_DYNAMIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glUseProgram(textureProgram);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, textureId);
-  glUniform1i(p_texLoc, 0);
-  glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
-  glEnableVertexAttribArray(p_posLoc);
-  glEnableVertexAttribArray(p_texCoord);
-  glVertexAttribPointer(p_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glVertexAttribPointer(p_texCoord, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (const void*)8);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glDisableVertexAttribArray(p_posLoc);
-  glDisableVertexAttribArray(p_texCoord);
+  drawImage(textureId, -100, 100, 200, 200);
   
   // draw text
-  drawText("Hello world. I am here!", 0.8, 0.2, 0.2);
+  drawText("Hello world. I am here!", -150, -350, 0.8, 0.2, 0.2);
+  drawRect(-150,-350, 10, 10);
 }
 
 // input events
