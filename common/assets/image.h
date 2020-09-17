@@ -1,14 +1,9 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-#include "png.h"
-
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#elif __APPLE__
-#include <OpenGLES/ES2/gl.h>
-#endif
+#include <png.h>
+#include "fileasset.h"
+#include "../opengl.h"
 
 struct PngHandle {
     const png_byte* data;
@@ -39,5 +34,8 @@ void releaseImage(const RawImageData* data);
 GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type, const GLvoid* pixels);
 
 GLuint createVbo(const GLsizeiptr size, const GLvoid* data, const GLenum usage);
+
+GLuint loadImage(const char* filename, const char* name);
+GLuint getImage(const char* name);
 
 #endif

@@ -127,7 +127,8 @@ target_link_libraries(openal OpenSLES)
 # build common game files as a static lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14 -Wall -Werror")
 AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common GAME_SOURCES) # all source files in common/
-add_library(game_common STATIC ${GAME_SOURCES})
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common/assets GAME_SOURCES_ASSETS) # source files in common/assets
+add_library(game_common STATIC ${GAME_SOURCES} ${GAME_SOURCES_ASSETS})
 # lib dependencies
 target_link_libraries(game_common GLESv2 png freetype freetypeGL sndfile openal)
 # includes

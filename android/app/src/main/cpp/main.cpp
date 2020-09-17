@@ -25,6 +25,7 @@
 #include <cassert>
 
 #include <EGL/egl.h>
+#include "assets/fileasset.h"
 #include "game.h"
 
 #include <android/sensor.h>

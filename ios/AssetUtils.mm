@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "game.h"
+#include "fileasset.h"
 
 FileData get_file_data(const char* path) {
     assert(path != NULL);

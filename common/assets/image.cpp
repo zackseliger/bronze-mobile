@@ -1,17 +1,10 @@
-#include "game.h"
 #include "image.h"
-#include "png.h"
-#include <stdio.h>
+#include "../utils.h"
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
+#include <map>
 
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#elif __APPLE__
-#include <OpenGLES/ES2/gl.h>
-#endif
+std::map<const char*, GLuint> textures; // all the textures we'll load
 
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
 static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop info_ptr);
@@ -160,4 +153,26 @@ GLuint createVbo(const GLsizeiptr size, const GLvoid* data, const GLenum usage) 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   return vbo_object;
+}
+
+GLuint loadImage(const char* filename, const char* name) {
+  RawImageData imageData = getImageData(filename);
+  GLuint buffer = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
+  releaseImage(&imageData);
+  
+  textures[name] = buffer;
+  
+  return buffer;
+}
+
+GLuint getImage(const char* name) {
+  std::map<const char*, GLuint>::iterator it;
+  
+  it = textures.find(name);
+  if (it == textures.end()) {
+    LOG("COULDN'T FIND TEXTURE \"%s\"", name);
+    return 0;
+  }
+  
+  return it->second;
 }

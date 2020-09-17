@@ -15,6 +15,11 @@
 		14029AC325099D0B007FA72C /* texture-font.c in Sources */ = {isa = PBXBuildFile; fileRef = 14029ABA25099D0A007FA72C /* texture-font.c */; };
 		14029AC425099D0B007FA72C /* utf8-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 14029ABD25099D0A007FA72C /* utf8-utils.c */; };
 		141607F424D4867F0044B10F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141607F324D4867F0044B10F /* GLKit.framework */; };
+		142EF5822513238F000C6393 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 142EF57E2513238F000C6393 /* image.cpp */; };
+		142EF5832513238F000C6393 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 142EF5802513238F000C6393 /* game.cpp */; };
+		142EF586251324EB000C6393 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 142EF584251324EB000C6393 /* sound.cpp */; };
+		142EF58925132818000C6393 /* fileasset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 142EF58725132818000C6393 /* fileasset.cpp */; };
+		142EF58C25133104000C6393 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 142EF58A25133104000C6393 /* utils.cpp */; };
 		1453351024D5F2A00017F2F3 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1453350F24D5F2A00017F2F3 /* assets */; };
 		1453351224D6153A0017F2F3 /* AssetUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1453351124D6153A0017F2F3 /* AssetUtils.mm */; };
 		1453355624D915D30017F2F3 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453353E24D915D30017F2F3 /* inflate.c */; };
@@ -32,7 +37,6 @@
 		1453356224D915D30017F2F3 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355124D915D30017F2F3 /* gzclose.c */; };
 		1453356324D915D30017F2F3 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355324D915D30017F2F3 /* inffast.c */; };
 		1453356424D915D30017F2F3 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355424D915D30017F2F3 /* adler32.c */; };
-		1453356E24D916CE0017F2F3 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1453356D24D916CE0017F2F3 /* image.cpp */; };
 		145D2B952510BB5600F84622 /* voice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AE62510BB5500F84622 /* voice.cpp */; };
 		145D2B962510BB5600F84622 /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AE72510BB5500F84622 /* helpers.cpp */; };
 		145D2B972510BB5600F84622 /* nfc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AEC2510BB5500F84622 /* nfc.cpp */; };
@@ -259,7 +263,6 @@
 		14860FC224D24091003F5BB8 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14860FC124D24091003F5BB8 /* ViewController.mm */; };
 		14860FC524D24091003F5BB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14860FC324D24091003F5BB8 /* Main.storyboard */; };
 		14860FCD24D24096003F5BB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 14860FCC24D24096003F5BB8 /* main.m */; };
-		14860FDC24D26EC2003F5BB8 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14860FDA24D26EC2003F5BB8 /* game.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -281,6 +284,17 @@
 		14029ABC25099D0A007FA72C /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		14029ABD25099D0A007FA72C /* utf8-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "utf8-utils.c"; sourceTree = "<group>"; };
 		141607F324D4867F0044B10F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		142EF5792513238F000C6393 /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opengl.h; sourceTree = "<group>"; };
+		142EF57B2513238F000C6393 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		142EF57E2513238F000C6393 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		142EF57F2513238F000C6393 /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
+		142EF5802513238F000C6393 /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
+		142EF584251324EB000C6393 /* sound.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sound.cpp; sourceTree = "<group>"; };
+		142EF585251324EB000C6393 /* sound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sound.h; sourceTree = "<group>"; };
+		142EF58725132818000C6393 /* fileasset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fileasset.cpp; sourceTree = "<group>"; };
+		142EF58825132818000C6393 /* fileasset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fileasset.h; sourceTree = "<group>"; };
+		142EF58A25133104000C6393 /* utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utils.cpp; sourceTree = "<group>"; };
+		142EF58B25133104000C6393 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		1453350F24D5F2A00017F2F3 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		1453351124D6153A0017F2F3 /* AssetUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AssetUtils.mm; sourceTree = SOURCE_ROOT; };
 		1453353C24D915D30017F2F3 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
@@ -309,8 +323,6 @@
 		1453355324D915D30017F2F3 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
 		1453355424D915D30017F2F3 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
 		1453355524D915D30017F2F3 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
-		1453356C24D916CE0017F2F3 /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
-		1453356D24D916CE0017F2F3 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		145D2AE62510BB5500F84622 /* voice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = voice.cpp; sourceTree = "<group>"; };
 		145D2AE72510BB5500F84622 /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = helpers.cpp; sourceTree = "<group>"; };
 		145D2AE92510BB5500F84622 /* biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = biquad.h; sourceTree = "<group>"; };
@@ -884,8 +896,6 @@
 		14860FC424D24091003F5BB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		14860FCB24D24096003F5BB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14860FCC24D24096003F5BB8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		14860FDA24D26EC2003F5BB8 /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; tabWidth = 2; };
-		14860FDB24D26EC2003F5BB8 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -938,6 +948,33 @@
 				141607F324D4867F0044B10F /* GLKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		142EF5782513238E000C6393 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				142EF5792513238F000C6393 /* opengl.h */,
+				142EF57B2513238F000C6393 /* game.h */,
+				142EF5802513238F000C6393 /* game.cpp */,
+				142EF58A25133104000C6393 /* utils.cpp */,
+				142EF58B25133104000C6393 /* utils.h */,
+				142EF57D2513238F000C6393 /* assets */,
+			);
+			name = common;
+			path = ../common;
+			sourceTree = "<group>";
+		};
+		142EF57D2513238F000C6393 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				142EF57E2513238F000C6393 /* image.cpp */,
+				142EF57F2513238F000C6393 /* image.h */,
+				142EF584251324EB000C6393 /* sound.cpp */,
+				142EF585251324EB000C6393 /* sound.h */,
+				142EF58725132818000C6393 /* fileasset.cpp */,
+				142EF58825132818000C6393 /* fileasset.h */,
+			);
+			path = assets;
 			sourceTree = "<group>";
 		};
 		1453353B24D915D30017F2F3 /* zlib */ = {
@@ -1735,8 +1772,8 @@
 				14029AAC25099D0A007FA72C /* freetypeGL */,
 				146FBD5224FA0D96004ABF8F /* libpng */,
 				1453353B24D915D30017F2F3 /* zlib */,
+				142EF5782513238E000C6393 /* common */,
 				1453350F24D5F2A00017F2F3 /* assets */,
-				14860FD924D26EC2003F5BB8 /* common */,
 				14860FBA24D24091003F5BB8 /* AppDelegate.h */,
 				14860FBB24D24091003F5BB8 /* AppDelegate.m */,
 				14860FBD24D24091003F5BB8 /* SceneDelegate.h */,
@@ -1758,18 +1795,6 @@
 				14860FB724D24091003F5BB8 /* Idle.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		14860FD924D26EC2003F5BB8 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				1453356D24D916CE0017F2F3 /* image.cpp */,
-				1453356C24D916CE0017F2F3 /* image.h */,
-				14860FDA24D26EC2003F5BB8 /* game.cpp */,
-				14860FDB24D26EC2003F5BB8 /* game.h */,
-			);
-			name = common;
-			path = ../common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1844,7 +1869,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1453356124D915D30017F2F3 /* trees.c in Sources */,
-				1453356E24D916CE0017F2F3 /* image.cpp in Sources */,
 				145D2BDB2510BB5600F84622 /* echo.cpp in Sources */,
 				145D30222510C8CD00F84622 /* table.c in Sources */,
 				145D303C2510C8CE00F84622 /* test_endswap.c in Sources */,
@@ -1857,7 +1881,6 @@
 				145D2F362510C4B600F84622 /* ftsynth.c in Sources */,
 				145D2FE52510C8CD00F84622 /* xi.c in Sources */,
 				145D2BCB2510BB5600F84622 /* uhjfilter.cpp in Sources */,
-				14860FDC24D26EC2003F5BB8 /* game.cpp in Sources */,
 				145D30282510C8CD00F84622 /* rpe.c in Sources */,
 				145D2F4C2510C53400F84622 /* pcf.c in Sources */,
 				145D300B2510C8CD00F84622 /* alac_decoder.c in Sources */,
@@ -1867,6 +1890,7 @@
 				145D30312510C8CD00F84622 /* chunk.c in Sources */,
 				145D30492510C8CE00F84622 /* audio_detect.c in Sources */,
 				146FBD7524FA0D96004ABF8F /* pngrtran.c in Sources */,
+				142EF5832513238F000C6393 /* game.cpp in Sources */,
 				146FBD6B24FA0D96004ABF8F /* pngwio.c in Sources */,
 				145D2BA82510BB5600F84622 /* auxeffectslot.cpp in Sources */,
 				145D2BAB2510BB5600F84622 /* bsinc_tables.cpp in Sources */,
@@ -1941,6 +1965,7 @@
 				145D30142510C8CD00F84622 /* caf.c in Sources */,
 				145D2FFA2510C8CD00F84622 /* ima_adpcm.c in Sources */,
 				145D2BAD2510BB5600F84622 /* loopback.cpp in Sources */,
+				142EF58925132818000C6393 /* fileasset.cpp in Sources */,
 				145D2BD42510BB5600F84622 /* equalizer.cpp in Sources */,
 				145D2BAA2510BB5600F84622 /* converter.cpp in Sources */,
 				145D2BB42510BB5600F84622 /* null.cpp in Sources */,
@@ -1977,6 +2002,7 @@
 				1453355E24D915D30017F2F3 /* inftrees.c in Sources */,
 				145D2F332510C4B600F84622 /* ftbbox.c in Sources */,
 				146FBD7324FA0D96004ABF8F /* pngget.c in Sources */,
+				142EF5822513238F000C6393 /* image.cpp in Sources */,
 				145D30202510C8CD00F84622 /* g723_16.c in Sources */,
 				145D2F302510C4B600F84622 /* ftbitmap.c in Sources */,
 				145D30292510C8CD00F84622 /* long_term.c in Sources */,
@@ -2036,6 +2062,7 @@
 				145D2BE12510BB5600F84622 /* almalloc.cpp in Sources */,
 				145D2FEE2510C8CD00F84622 /* strings.c in Sources */,
 				145D2F402510C4E200F84622 /* ftbzip2.c in Sources */,
+				142EF58C25133104000C6393 /* utils.cpp in Sources */,
 				145D30362510C8CD00F84622 /* test_audio_detect.c in Sources */,
 				145D30382510C8CE00F84622 /* avr.c in Sources */,
 				145D2F562510C57100F84622 /* raster.c in Sources */,
@@ -2049,6 +2076,7 @@
 				145D2BDF2510BB5600F84622 /* modulator.cpp in Sources */,
 				145D2BD72510BB5600F84622 /* pshifter.cpp in Sources */,
 				145D30082510C8CD00F84622 /* id3.c in Sources */,
+				142EF586251324EB000C6393 /* sound.cpp in Sources */,
 				145D2BCD2510BB5600F84622 /* mixer_sse41.cpp in Sources */,
 				1453355624D915D30017F2F3 /* inflate.c in Sources */,
 				145D2FEF2510C8CD00F84622 /* pvf.c in Sources */,
