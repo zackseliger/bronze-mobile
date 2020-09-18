@@ -9,7 +9,7 @@
 
 void LOG(const char *fmt, ...) {
   va_list arg;
-  char* buffer = 0;
+  char buffer[256];
 
   /* Write the error message */
   va_start(arg, fmt);

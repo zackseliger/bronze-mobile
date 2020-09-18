@@ -24,6 +24,9 @@
 // stuff that should be in the engine
 double screenWidth;
 double screenHeight;
+double game_width = 500;
+double game_height = 500;
+float xScale, yScale = 1;
 // programs
 GLuint colorProgram;
 GLint c_uProjLoc;
@@ -324,33 +327,71 @@ void glRender() {
   // draw text
   drawText("Hello world. I am here!", -150, -250, 0.8, 0.2, 0.2);
   drawRect(-150,-250, 10, 10);
+  
+  drawRect(-10,-10,20,20);//20x20 block in the center
+}
+
+// util
+float getScreenHeight() {
+  return (game_height/yScale) + (screenHeight/yScale - game_height);
+}
+float getScreenWidth() {
+  return (game_width/xScale) + (screenWidth/xScale - game_width);
 }
 
 // input events
 void startTouch(int id, float x, float y) {
-  topX = x - screenWidth/2;
-  topY = y - screenHeight/2;
+  double xExtraScale = (screenWidth - game_width*xScale) / (game_width);
+  double yExtraScale = (screenHeight - game_height*yScale) / (game_height);
+  
+  if (xExtraScale == 0) xExtraScale = xScale;
+  if (yExtraScale == 0) yExtraScale = yScale;
+  
+  topX = (x - screenWidth/2) / xExtraScale / xScale;
+  topY = (y - screenHeight/2) / yExtraScale / yScale;
 }
 void moveTouch(int id, float x, float y) {
-  topX = x - screenWidth/2;
-  topY = y - screenHeight/2;
+  double xExtraScale = (screenWidth - game_width*xScale) / (game_width);
+  double yExtraScale = (screenHeight - game_height*yScale) / (game_height);
+  
+  if (xExtraScale == 0) xExtraScale = xScale;
+  if (yExtraScale == 0) yExtraScale = yScale;
+  
+  topX = (x - screenWidth/2) / xExtraScale / xScale;
+  topY = (y - screenHeight/2) / yExtraScale / yScale;
 }
 void endTouch(int id, float x, float y) {
-  topX = x - screenWidth/2;
-  topY = y - screenHeight/2;
+  double xExtraScale = (screenWidth - game_width*xScale) / (game_width);
+  double yExtraScale = (screenHeight - game_height*yScale) / (game_height);
+  
+  if (xExtraScale == 0) xExtraScale = xScale;
+  if (yExtraScale == 0) yExtraScale = yScale;
+  
+  topX = (x - screenWidth/2) / xExtraScale / xScale;
+  topY = (y - screenHeight/2) / yExtraScale / yScale;
 }
 
 // misc events
 void handleResize(double width, double height) {
   screenWidth = width;
   screenHeight = height;
-  glViewport(0, 0, screenWidth, screenHeight);
-
+  glViewport(0, 0, game_width, game_height);
+    
+  float ratio = screenWidth / screenHeight;
+  if (ratio > game_width / game_height) {
+    xScale = screenHeight / game_height;
+    yScale = xScale;
+  }
+  else {
+    xScale = screenWidth / game_width;
+    yScale = xScale;
+  }
+  
   // redo our projection matrix
-  float right = screenWidth / 2;
-  float left = -screenWidth / 2;
-  float top = -screenHeight / 2;
-  float bot = screenHeight / 2;
+  float right = (game_width/2/xScale) + (screenWidth/2/xScale - game_width/2);
+  float left = (-game_width/2/xScale) + (-screenWidth/2/xScale + game_width/2);
+  float top = (-game_height/2/yScale) + (-screenHeight/2/yScale + game_height/2);
+  float bot = (game_height/2/yScale) + (screenHeight/2/yScale - game_height/2);
   GLfloat projMat[] = {
           static_cast<GLfloat>(2.0 / (right - left)), 0, 0, -(right + left) / (right - left),
           0, static_cast<GLfloat>(2.0 / (top - bot)), 0, -(top + bot) / (top - bot),
