@@ -37,6 +37,8 @@
 		1453356224D915D30017F2F3 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355124D915D30017F2F3 /* gzclose.c */; };
 		1453356324D915D30017F2F3 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355324D915D30017F2F3 /* inffast.c */; };
 		1453356424D915D30017F2F3 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 1453355424D915D30017F2F3 /* adler32.c */; };
+		1459D7CE2518480100C5077B /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1459D7CC2518480100C5077B /* application.cpp */; };
+		1459D7D12518498500C5077B /* context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1459D7CF2518498500C5077B /* context.cpp */; };
 		145D2B952510BB5600F84622 /* voice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AE62510BB5500F84622 /* voice.cpp */; };
 		145D2B962510BB5600F84622 /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AE72510BB5500F84622 /* helpers.cpp */; };
 		145D2B972510BB5600F84622 /* nfc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145D2AEC2510BB5500F84622 /* nfc.cpp */; };
@@ -323,6 +325,10 @@
 		1453355324D915D30017F2F3 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
 		1453355424D915D30017F2F3 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
 		1453355524D915D30017F2F3 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
+		1459D7CC2518480100C5077B /* application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = application.cpp; sourceTree = "<group>"; };
+		1459D7CD2518480100C5077B /* application.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = application.h; sourceTree = "<group>"; };
+		1459D7CF2518498500C5077B /* context.cpp */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = context.cpp; sourceTree = "<group>"; };
+		1459D7D02518498500C5077B /* context.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = context.h; sourceTree = "<group>"; };
 		145D2AE62510BB5500F84622 /* voice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = voice.cpp; sourceTree = "<group>"; };
 		145D2AE72510BB5500F84622 /* helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = helpers.cpp; sourceTree = "<group>"; };
 		145D2AE92510BB5500F84622 /* biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = biquad.h; sourceTree = "<group>"; };
@@ -958,6 +964,10 @@
 				142EF5802513238F000C6393 /* game.cpp */,
 				142EF58A25133104000C6393 /* utils.cpp */,
 				142EF58B25133104000C6393 /* utils.h */,
+				1459D7CC2518480100C5077B /* application.cpp */,
+				1459D7CD2518480100C5077B /* application.h */,
+				1459D7CF2518498500C5077B /* context.cpp */,
+				1459D7D02518498500C5077B /* context.h */,
 				142EF57D2513238F000C6393 /* assets */,
 			);
 			name = common;
@@ -1936,6 +1946,7 @@
 				145D2BDA2510BB5600F84622 /* compressor.cpp in Sources */,
 				145D2BD62510BB5600F84622 /* null.cpp in Sources */,
 				145D2BC92510BB5600F84622 /* alexcpt.cpp in Sources */,
+				1459D7CE2518480100C5077B /* application.cpp in Sources */,
 				145D2BB22510BB5600F84622 /* wave.cpp in Sources */,
 				145D2FFF2510C8CD00F84622 /* command.c in Sources */,
 				145D300E2510C8CD00F84622 /* matrix_enc.c in Sources */,
@@ -2043,6 +2054,7 @@
 				145D2BDD2510BB5600F84622 /* chorus.cpp in Sources */,
 				145D2BC72510BB5600F84622 /* alcomplex.cpp in Sources */,
 				145D30192510C8CD00F84622 /* dwd.c in Sources */,
+				1459D7D12518498500C5077B /* context.cpp in Sources */,
 				145D2F4A2510C52A00F84622 /* ftlzw.c in Sources */,
 				145D30152510C8CD00F84622 /* ogg.c in Sources */,
 				145D2B952510BB5600F84622 /* voice.cpp in Sources */,
