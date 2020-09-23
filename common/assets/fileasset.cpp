@@ -4,27 +4,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-// default constructor
-//FileData::FileData() {
-//  this->size = 0;
-//  this->data = nullptr;
-//  this->handle = nullptr;
-//}
-//
-//// constructor with crap provided
-//FileData::FileData(long size, void* data, void* handle) {
-//  this->size = size;
-//  this->data = data;
-//  this->handle = handle;
-//}
-//
-//// copy operator
-//FileData::FileData& operator=(FileData other) {
-//  this->size = other.size;
-//  this->data = other.data;
-//  this->handle = other.handle;
-//}
-
 AAssetManager* assetManager;
 FileData getAsset(const char* filename) {
   AAsset* asset = AAssetManager_open(assetManager, filename, AASSET_MODE_STREAMING);

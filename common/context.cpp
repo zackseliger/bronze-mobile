@@ -155,11 +155,30 @@ void OpenGLContext::init() {
   glUniformMatrix4fv(this->c_uCamLoc, 1, GL_FALSE, initCamMat);
   glUseProgram(this->textureProgram);
   glUniformMatrix4fv(this->p_uCamLoc, 1, GL_FALSE, initCamMat);
+}
+
+void OpenGLContext::setViewport(float x, float y, float w, float h) {
+  glViewport(x, y, w, h);
+}
+
+void OpenGLContext::setProjection(GLfloat* proj) {
+//  this->projection = proj;
+  memcpy(this->projection, proj, 16 * sizeof(float));
   
-  //setup freetype-gl
-  FileData font = getAsset("Poetsen.ttf");//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
-  texAtlas = ftgl::texture_atlas_new(512, 512, 1);
-  texFont = ftgl::texture_font_new_from_memory(texAtlas, 32, font.data, font.size);
+  glUseProgram(this->colorProgram);
+  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->textureProgram);
+  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+}
+
+void OpenGLContext::setFont(const char* filename) {
+  if (this->fontFile.data != nullptr) {
+    freeAsset(this->fontFile);
+  }
+  
+  this->fontFile = getAsset(filename);//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
+  this->texAtlas = ftgl::texture_atlas_new(512, 512, 1);
+  this->texFont = ftgl::texture_font_new_from_memory(this->texAtlas, 32, this->fontFile.data, this->fontFile.size);
 }
 
 void OpenGLContext::drawRect(float x, float y, float width, float height) {

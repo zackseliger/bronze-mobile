@@ -107,6 +107,9 @@ void glSetup(double width, double height) {
   
   // initial window resize
   handleResize(width, height);
+  
+  // set font
+  context.setFont("Poetsen.ttf");
 
   // setup image
   loadImage("image/pngtest.png", "testImage");
@@ -118,6 +121,7 @@ void glSetup(double width, double height) {
   if (!context) LOG("COULDN'T OPEN AUDIO CONTEXT");
   if (alcMakeContextCurrent(context) == ALC_FALSE) LOG("CONTEXT COULDN'T BE MADE CURRENT");
 
+  // setup audio
   ALuint buffer = loadSound("audio/wavtest.wav", "test");
   ALuint source;
   alGenSources(1, &source);
@@ -184,7 +188,6 @@ void endTouch(int id, float x, float y) {
 void handleResize(double width, double height) {
   screenWidth = width;
   screenHeight = height;
-  glViewport(0, 0, width, height);
     
   float ratio = screenWidth / screenHeight;
   if (ratio > game_width / game_height) {
@@ -207,8 +210,7 @@ void handleResize(double width, double height) {
           0, 0, -2.0 / (1.0 + 1.0), -(1.0 - 1.0) / (1.0 + 1.0),
           0, 0, 0, 1
   };
-  glUseProgram(context.textureProgram);
-  glUniformMatrix4fv(context.p_uProjLoc, 1, GL_FALSE, projMat);
-  glUseProgram(context.colorProgram);
-  glUniformMatrix4fv(context.c_uProjLoc, 1, GL_FALSE, projMat);
+  
+  context.setViewport(0, 0, width, height);
+  context.setProjection(projMat);
 }

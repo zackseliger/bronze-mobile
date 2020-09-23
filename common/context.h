@@ -24,11 +24,18 @@ public:
   GLuint p_color;
   
   // freetype stuff
+  FileData fontFile;
   ftgl::texture_atlas_t* texAtlas;
   ftgl::texture_font_t* texFont;
+  void setFont(const char*);
   
   // function to set up programs
   void init();
+  
+  // projecetion and camera stuff
+  float projection[16];
+  void setViewport(float, float, float, float);
+  void setProjection(GLfloat*);
   
   // drawing functions
   void drawRect(float, float, float, float);
