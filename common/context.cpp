@@ -87,7 +87,7 @@ void OpenGLContext::init() {
 
       void main() {
         vColor = aColor;
-        gl_Position = uProj * uCam * vec4(vPosition, 0.0, 1.0);
+        gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
       }
   )";
   const char* colorFrag = R"(
@@ -118,7 +118,7 @@ void OpenGLContext::init() {
 
       void main() {
         vTextureCoordinates = aTextureCoordinates;
-        gl_Position = uProj * uCam * vec4(vPosition, 0.0, 1.0);
+        gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
       }
   )";
   const char* texFrag = R"(
@@ -161,9 +161,24 @@ void OpenGLContext::setViewport(float x, float y, float w, float h) {
   glViewport(x, y, w, h);
 }
 
-void OpenGLContext::setProjection(GLfloat* proj) {
-//  this->projection = proj;
-  memcpy(this->projection, proj, 16 * sizeof(float));
+void OpenGLContext::setProjection(float left, float right, float top, float bot) {
+  GLfloat projMat[] = {
+          static_cast<GLfloat>(2.0 / (right - left)), 0, 0, -(right + left) / (right - left),
+          0, static_cast<GLfloat>(2.0 / (top - bot)), 0, -(top + bot) / (top - bot),
+          0, 0, -2.0 / (1.0 + 1.0), -(1.0 - 1.0) / (1.0 + 1.0),
+          0, 0, 0, 1
+  };
+  memcpy(this->projection, projMat, 16 * sizeof(float));
+  
+  glUseProgram(this->colorProgram);
+  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->textureProgram);
+  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+}
+
+void OpenGLContext::translate(float x, float y) {
+  this->projection[3] += this->projection[0] * x;
+  this->projection[7] += this->projection[5] * y;
   
   glUseProgram(this->colorProgram);
   glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);

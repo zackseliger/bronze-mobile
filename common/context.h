@@ -35,7 +35,8 @@ public:
   // projecetion and camera stuff
   float projection[16];
   void setViewport(float, float, float, float);
-  void setProjection(GLfloat*);
+  void setProjection(float, float, float, float);
+  void translate(float, float);
   
   // drawing functions
   void drawRect(float, float, float, float);

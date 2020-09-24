@@ -160,6 +160,9 @@ void glRender() {
   context.drawRect(topX-5, topY-5, 10, 10);
   
   context.drawRect(-10,-10,20,20);//20x20 block in the center
+  context.translate(20,20);
+  context.drawRect(-10,-10,20,20);
+  context.translate(-20,-20);
 }
 
 // util
@@ -204,13 +207,7 @@ void handleResize(double width, double height) {
   float left = (-game_width/2) + (-screenWidth/xScale + game_width)/2;
   float top = (-game_height/2) + (-screenHeight/yScale + game_height)/2;
   float bot = (game_height/2) + (screenHeight/yScale - game_height)/2;
-  GLfloat projMat[] = {
-          static_cast<GLfloat>(2.0 / (right - left)), 0, 0, -(right + left) / (right - left),
-          0, static_cast<GLfloat>(2.0 / (top - bot)), 0, -(top + bot) / (top - bot),
-          0, 0, -2.0 / (1.0 + 1.0), -(1.0 - 1.0) / (1.0 + 1.0),
-          0, 0, 0, 1
-  };
   
   context.setViewport(0, 0, width, height);
-  context.setProjection(projMat);
+  context.setProjection(left, right, top, bot);
 }
