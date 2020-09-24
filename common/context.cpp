@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <math.h>
 #include "utils.h"
 #include "assets/fileasset.h"
 #include "assets/image.h"
@@ -78,26 +79,26 @@ GLuint buildProgramContext(const char* vertSrc, const char* fragSrc) {
 void OpenGLContext::init() {
   // color program shaders
   const char* colorVert = R"(
-      attribute vec2 vPosition;
-      uniform mat4 uProj;
-      uniform mat4 uCam;
+    attribute vec2 vPosition;
+    uniform mat4 uProj;
+    uniform mat4 uCam;
 
-      attribute vec3 aColor;
-      varying vec3 vColor;
+    attribute vec3 aColor;
+    varying vec3 vColor;
 
-      void main() {
-        vColor = aColor;
-        gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
-      }
+    void main() {
+      vColor = aColor;
+      gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
+    }
   )";
   const char* colorFrag = R"(
-      precision mediump float;
+    precision mediump float;
 
-      varying vec3 vColor;
+    varying vec3 vColor;
 
-      void main() {
-        gl_FragColor = vec4(vColor, 1.0);
-      }
+    void main() {
+      gl_FragColor = vec4(vColor, 1.0);
+    }
   )";
 
   // compiling color shader
@@ -109,28 +110,28 @@ void OpenGLContext::init() {
 
   // texture program shaders
   const char* texVert = R"(
-      attribute vec2 vPosition;
-      uniform mat4 uProj;
-      uniform mat4 uCam;
+    attribute vec2 vPosition;
+    uniform mat4 uProj;
+    uniform mat4 uCam;
 
-      attribute vec2 aTextureCoordinates;
-      varying vec2 vTextureCoordinates;
+    attribute vec2 aTextureCoordinates;
+    varying vec2 vTextureCoordinates;
 
-      void main() {
-        vTextureCoordinates = aTextureCoordinates;
-        gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
-      }
+    void main() {
+      vTextureCoordinates = aTextureCoordinates;
+      gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
+    }
   )";
   const char* texFrag = R"(
-      precision mediump float;
+    precision mediump float;
 
-      uniform sampler2D uTextureUnit;
-      varying vec2 vTextureCoordinates;
-      uniform vec4 uColor;
+    uniform sampler2D uTextureUnit;
+    varying vec2 vTextureCoordinates;
+    uniform vec4 uColor;
 
-      void main() {
-        gl_FragColor = texture2D(uTextureUnit, vTextureCoordinates) + uColor;
-      }
+    void main() {
+      gl_FragColor = texture2D(uTextureUnit, vTextureCoordinates) + uColor;
+    }
   )";
 
   // compiling texture shader
@@ -141,10 +142,58 @@ void OpenGLContext::init() {
   this->p_texLoc = glGetUniformLocation(this->textureProgram, "uTextureUnit");
   this->p_texCoord = glGetAttribLocation(this->textureProgram, "aTextureCoordinates");
   this->p_color = glGetUniformLocation(this->textureProgram, "uColor");
+  
+  // general program shaders
+  const char* genVert = R"(
+    attribute vec2 aPosition;
+    uniform mat4 uProj;
+    uniform mat4 uCam;
+  
+    attribute vec4 aColor;
+    varying vec4 vColor;
+  
+    attribute vec2 aTexCoords;
+    varying vec2 vTexCoords;
+  
+    void main() {
+      vColor = aColor;
+      vTexCoords = aTexCoords;
+      gl_Position = vec4(aPosition, 0.0, 1.0) * uProj * uCam;
+    }
+  )";
+  const char* genFrag = R"(
+    precision mediump float;
+
+    uniform sampler2D uTextureUnit;
+    varying vec2 vTexCoords;
+    varying vec4 vColor;
+    uniform vec4 uColorTint;
+
+    void main() {
+      gl_FragColor = texture2D(uTextureUnit, vTexCoords) * vColor + uColorTint;
+      //texture2D(uTextureUnit, vTexCoords) * vColor + uColorTint
+    }
+  )";
+  
+  // compiling general shader
+  this->generalProgram = buildProgramContext(genVert, genFrag);
+  this->g_posLoc = glGetAttribLocation(this->generalProgram, "aPosition");
+  this->g_uProjLoc = glGetUniformLocation(this->generalProgram, "uProj");
+  this->g_uCamLoc = glGetUniformLocation(this->generalProgram, "uCam");
+  this->g_texLoc = glGetUniformLocation(this->generalProgram, "uTextureUnit");
+  this->g_texCoord = glGetAttribLocation(this->generalProgram, "aTexCoords");
+  this->g_color = glGetAttribLocation(this->generalProgram, "aColor");
+  this->g_uColorTint = glGetUniformLocation(this->generalProgram, "uColorTint");
 
   // enable transparency
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
+  // white texture for general program
+  uint32_t whiteTexData = 0xffffffff;
+  this->whiteTex = loadTexture(1, 1, GL_RGBA, &whiteTexData);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, this->whiteTex);
 
   // setup initial matrix values
   GLfloat initCamMat[] = {1, 0, 0, 0,
@@ -155,6 +204,8 @@ void OpenGLContext::init() {
   glUniformMatrix4fv(this->c_uCamLoc, 1, GL_FALSE, initCamMat);
   glUseProgram(this->textureProgram);
   glUniformMatrix4fv(this->p_uCamLoc, 1, GL_FALSE, initCamMat);
+  glUseProgram(this->generalProgram);
+  glUniformMatrix4fv(this->g_uCamLoc, 1, GL_FALSE, initCamMat);
 }
 
 void OpenGLContext::setViewport(float x, float y, float w, float h) {
@@ -174,16 +225,64 @@ void OpenGLContext::setProjection(float left, float right, float top, float bot)
   glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
   glUseProgram(this->textureProgram);
   glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->generalProgram);
+  glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 
 void OpenGLContext::translate(float x, float y) {
-  this->projection[3] += this->projection[0] * x;
-  this->projection[7] += this->projection[5] * y;
+  this->projection[3]  += this->projection[0] * x + this->projection[1] * y;
+  this->projection[7]  += this->projection[5] * y + this->projection[4] * x;
+  this->projection[11] += this->projection[8] * x + this->projection[9] * y;
+  this->projection[15] += this->projection[12]* x + this->projection[13]* y;
   
   glUseProgram(this->colorProgram);
   glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
   glUseProgram(this->textureProgram);
   glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->generalProgram);
+  glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
+}
+
+void OpenGLContext::rotate(float rad) {
+  // values we need for later
+  // rad should be negative to rotate clockwise, but it seems to work like this
+  float cr = cos(rad);
+  float sr = sin(rad);
+  float temp[16];
+  memcpy(temp, this->projection, 16*sizeof(float));
+  
+  this->projection[0] = temp[0] * cr + temp[1] * sr;
+  this->projection[1] = temp[0] * -sr + temp[1] * cr;
+  this->projection[4] = temp[4] * cr + temp[5] * sr;
+  this->projection[5] = temp[4] * -sr + temp[5] * cr;
+  this->projection[8] = temp[8] * cr + temp[9] * sr;
+  this->projection[9] = temp[8] * -sr + temp[9] * cr;
+  this->projection[12] = temp[12] * cr + temp[13] * sr;
+  this->projection[13] = temp[12] * -sr + temp[13] * cr;
+  
+  glUseProgram(this->colorProgram);
+  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->textureProgram);
+  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->generalProgram);
+  glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
+}
+void OpenGLContext::scale(float sx, float sy) {
+  this->projection[0] *= sx;
+  this->projection[1] *= sy;
+  this->projection[4] *= sx;
+  this->projection[5] *= sy;
+  this->projection[8] *= sx;
+  this->projection[9] *= sy;
+  this->projection[12] *= sx;
+  this->projection[13] *= sy;
+  
+  glUseProgram(this->colorProgram);
+  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->textureProgram);
+  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
+  glUseProgram(this->generalProgram);
+  glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 
 void OpenGLContext::setFont(const char* filename) {
@@ -194,6 +293,46 @@ void OpenGLContext::setFont(const char* filename) {
   this->fontFile = getAsset(filename);//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
   this->texAtlas = ftgl::texture_atlas_new(512, 512, 1);
   this->texFont = ftgl::texture_font_new_from_memory(this->texAtlas, 32, this->fontFile.data, this->fontFile.size);
+}
+
+void OpenGLContext::initRender() {
+  glClearColor(0.2, 0.1, 0.9, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLContext::setColorGeneral(float r, float g, float b, float a) {
+  this->red = r;
+  this->green = g;
+  this->blue = b;
+  this->alpha = a;
+}
+
+void OpenGLContext::drawRectGeneral(float x, float y, float width, float height) {
+  GLfloat verticies[] = {x,y, x,y+height, x+width,y, x+width,y+height};
+  GLfloat colors[] = {
+    this->red,this->green,this->blue,this->alpha,
+    this->red,this->green,this->blue,this->alpha,
+    this->red,this->green,this->blue,this->alpha,
+    this->red,this->green,this->blue,this->alpha
+  };
+  GLfloat uvCoords[] = {0.0f,0.0f, 0.0f,1.0f, 1.0f,0.0f, 1.0f,1.0f};
+  
+  glUseProgram(this->generalProgram);
+  
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, this->whiteTex);
+  glUniform1i(this->g_texLoc, 0);
+  
+  glVertexAttribPointer(this->g_posLoc, 2, GL_FLOAT, GL_FALSE, 0, verticies);
+  glVertexAttribPointer(this->g_color, 4, GL_FLOAT, GL_FALSE, 0, colors);
+  glVertexAttribPointer(this->g_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
+  glEnableVertexAttribArray(this->g_posLoc);
+  glEnableVertexAttribArray(this->g_color);
+  glEnableVertexAttribArray(this->g_texCoord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableVertexAttribArray(this->g_posLoc);
+  glDisableVertexAttribArray(this->g_color);
+  glDisableVertexAttribArray(this->g_texCoord);
 }
 
 void OpenGLContext::drawRect(float x, float y, float width, float height) {
@@ -210,15 +349,42 @@ void OpenGLContext::drawRect(float x, float y, float width, float height) {
   glDisableVertexAttribArray(this->c_color);
 }
 
+void OpenGLContext::drawImageGeneral(GLuint tex, float x, float y, float width, float height) {
+  GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
+  GLfloat colors[] = {
+    1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0,
+    1.0,1.0,1.0,1.0
+  };
+  GLfloat uvCoords[] = {0.0f,0.0f, 0.0f,1.0f, 1.0f,0.0f, 1.0f,1.0f};
+  
+  glUseProgram(this->generalProgram);
+  glActiveTexture(GL_TEXTURE1);
+  
+  glBindTexture(GL_TEXTURE_2D, tex);
+  glUniform1i(this->g_texLoc, 1);
+  glVertexAttribPointer(this->g_posLoc, 2, GL_FLOAT, GL_FALSE, 0, positions);
+  glVertexAttribPointer(this->g_color, 4, GL_FLOAT, GL_FALSE, 0, colors);
+  glVertexAttribPointer(this->g_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
+  glEnableVertexAttribArray(this->g_posLoc);
+  glEnableVertexAttribArray(this->g_color);
+  glEnableVertexAttribArray(this->g_texCoord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableVertexAttribArray(this->g_posLoc);
+  glDisableVertexAttribArray(this->g_color);
+  glDisableVertexAttribArray(this->g_texCoord);
+}
+
 void OpenGLContext::drawImage(GLuint tex, float x, float y, float width, float height) {
   GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
   GLfloat uvCoords[] = {0.0f,0.0f, 0.0f,1.0f, 1.0f,0.0f, 1.0f,1.0f};
 
   glUseProgram(this->textureProgram);
-  glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE1);
 
   glBindTexture(GL_TEXTURE_2D, tex);
-  glUniform1i(this->p_texLoc, 0);
+  glUniform1i(this->p_texLoc, 1);
   glVertexAttribPointer(this->p_posLoc, 2, GL_FLOAT, GL_FALSE, 0, positions);
   glVertexAttribPointer(this->p_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
   glEnableVertexAttribArray(this->p_posLoc);

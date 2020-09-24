@@ -23,6 +23,20 @@ public:
   GLint p_texCoord;
   GLuint p_color;
   
+  // general program
+  GLuint generalProgram;
+  GLint g_uProjLoc;
+  GLint g_uCamLoc;
+  GLint g_posLoc;
+  GLint g_texLoc;
+  GLint g_texCoord;
+  GLint g_color;
+  GLint g_uColorTint;
+  float red;
+  float green;
+  float blue;
+  float alpha;
+  
   // freetype stuff
   FileData fontFile;
   ftgl::texture_atlas_t* texAtlas;
@@ -37,11 +51,20 @@ public:
   void setViewport(float, float, float, float);
   void setProjection(float, float, float, float);
   void translate(float, float);
+  void rotate(float);
+  void scale(float, float);
   
   // drawing functions
+  void initRender();
   void drawRect(float, float, float, float);
   void drawImage(GLuint, float, float, float, float);
   void drawText(const char*, float, float, float, float, float);
+  
+  // temp
+  void drawRectGeneral(float, float, float, float);
+  void setColorGeneral(float, float, float, float);
+  void drawImageGeneral(GLuint, float, float, float, float);
+  GLuint whiteTex;
 };
 
 #endif // CONTEXT_H

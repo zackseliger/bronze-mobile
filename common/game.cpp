@@ -132,36 +132,27 @@ void glSetup(double width, double height) {
 }
 
 void glRender() {
-  glClearColor(0.2, 0.1, 0.9, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // draw texture
-//  drawImage(texAtlas->id, -100, -200, 200, 200);
-//
-//  // draw triangle
-//  GLfloat verticies[] = {topX,topY, -100,100, 100,100, 200,200};
-//  GLfloat colors[] = {1.0,0.0,0.0, 0.5,0.5,0.5, 0.5,0.5,0.5, 0.6,0.6,0.3};
-//  glUseProgram(colorProgram);
-//  glVertexAttribPointer(c_posLoc, 2, GL_FLOAT, GL_FALSE, 0, verticies);
-//  glVertexAttribPointer(c_color, 3, GL_FLOAT, GL_FALSE, 0, colors);
-//  glEnableVertexAttribArray(c_posLoc);
-//  glEnableVertexAttribArray(c_color);
-//  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//  glDisableVertexAttribArray(c_posLoc);
-//  glDisableVertexAttribArray(c_color);
-  
-  // draw texture 2
-  context.drawImage(getImage("testImage"), -100, 100, 200, 200);
+  context.initRender();
+  // draw textures
+  context.drawImageGeneral(context.texAtlas->id, -100, -200, 200, 200);
+  context.drawImageGeneral(getImage("testImage"), -100, 100, 200, 200);
   
   // draw text
   context.drawText("Hello world. I am here!", -150, -250, 0.8, 0.2, 0.2);
-  context.drawRect(-150, -250, 10, 10);
   
   context.drawRect(topX-5, topY-5, 10, 10);
   
+  //testing out translating and rotating and stuff
   context.drawRect(-10,-10,20,20);//20x20 block in the center
   context.translate(20,20);
-  context.drawRect(-10,-10,20,20);
+  context.rotate(topX/100);
+  
+  context.setColorGeneral(0.2,0.1,0.7,0.7);
+  context.drawRectGeneral(-10,-10,20,20);
+  context.setColorGeneral(0.5,0.9,0.1,1.0);
+  context.drawRectGeneral(100,100,20,20);
+  
+  context.rotate(-topX/100);
   context.translate(-20,-20);
 }
 
