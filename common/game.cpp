@@ -132,26 +132,26 @@ void glSetup(double width, double height) {
 }
 
 void glRender() {
-  context.initRender();
+  context.renderBegin();
   // draw textures
-  context.drawImageGeneral(context.texAtlas->id, -100, -200, 200, 200);
-  context.drawImageGeneral(getImage("testImage"), -100, 100, 200, 200);
+  context.drawImage(context.texAtlas->id, -100, -200, 200, 200);
+  context.drawImage(getImage("testImage"), -100, 100, 200, 200);
   
   // draw text
-  context.drawText("Hello world. I am here!", -150, -250, 0.8, 0.2, 0.2);
+  context.setColor(0.8,0.2,0.2,topX/200);
+  context.drawText("Hello world. I am here!", -150, -250);
   
+  context.setColor(0,0,0,1);
   context.drawRect(topX-5, topY-5, 10, 10);
+  context.drawRect(-10,-10,20,20);//20x20 block in the center
   
   //testing out translating and rotating and stuff
-  context.drawRect(-10,-10,20,20);//20x20 block in the center
   context.translate(20,20);
   context.rotate(topX/100);
-  
-  context.setColorGeneral(0.2,0.1,0.7,0.7);
-  context.drawRectGeneral(-10,-10,20,20);
-  context.setColorGeneral(0.5,0.9,0.1,1.0);
-  context.drawRectGeneral(100,100,20,20);
-  
+    context.setColor(0.2,0.1,0.7,0.7);
+    context.drawRect(-10,-10,20,20);
+    context.setColor(0.5,0.9,0.1,1.0);
+    context.drawRect(100,100,20,20);
   context.rotate(-topX/100);
   context.translate(-20,-20);
 }

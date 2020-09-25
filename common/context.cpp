@@ -77,72 +77,6 @@ GLuint buildProgramContext(const char* vertSrc, const char* fragSrc) {
 }
 
 void OpenGLContext::init() {
-  // color program shaders
-  const char* colorVert = R"(
-    attribute vec2 vPosition;
-    uniform mat4 uProj;
-    uniform mat4 uCam;
-
-    attribute vec3 aColor;
-    varying vec3 vColor;
-
-    void main() {
-      vColor = aColor;
-      gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
-    }
-  )";
-  const char* colorFrag = R"(
-    precision mediump float;
-
-    varying vec3 vColor;
-
-    void main() {
-      gl_FragColor = vec4(vColor, 1.0);
-    }
-  )";
-
-  // compiling color shader
-  this->colorProgram = buildProgramContext(colorVert, colorFrag);
-  this->c_posLoc = glGetAttribLocation(this->colorProgram, "vPosition");
-  this->c_uProjLoc = glGetUniformLocation(this->colorProgram, "uProj");
-  this->c_uCamLoc = glGetUniformLocation(this->colorProgram, "uCam");
-  this->c_color = glGetAttribLocation(this->colorProgram, "aColor");
-
-  // texture program shaders
-  const char* texVert = R"(
-    attribute vec2 vPosition;
-    uniform mat4 uProj;
-    uniform mat4 uCam;
-
-    attribute vec2 aTextureCoordinates;
-    varying vec2 vTextureCoordinates;
-
-    void main() {
-      vTextureCoordinates = aTextureCoordinates;
-      gl_Position = vec4(vPosition, 0.0, 1.0) * uProj * uCam;
-    }
-  )";
-  const char* texFrag = R"(
-    precision mediump float;
-
-    uniform sampler2D uTextureUnit;
-    varying vec2 vTextureCoordinates;
-    uniform vec4 uColor;
-
-    void main() {
-      gl_FragColor = texture2D(uTextureUnit, vTextureCoordinates) + uColor;
-    }
-  )";
-
-  // compiling texture shader
-  this->textureProgram = buildProgramContext(texVert, texFrag);
-  this->p_posLoc = glGetAttribLocation(this->textureProgram, "vPosition");
-  this->p_uProjLoc = glGetUniformLocation(this->textureProgram, "uProj");
-  this->p_uCamLoc = glGetUniformLocation(this->textureProgram, "uCam");
-  this->p_texLoc = glGetUniformLocation(this->textureProgram, "uTextureUnit");
-  this->p_texCoord = glGetAttribLocation(this->textureProgram, "aTextureCoordinates");
-  this->p_color = glGetUniformLocation(this->textureProgram, "uColor");
-  
   // general program shaders
   const char* genVert = R"(
     attribute vec2 aPosition;
@@ -200,10 +134,6 @@ void OpenGLContext::init() {
                           0, 1, 0, 0,
                           0, 0, 1, 0,
                           0, 0, 0, 1};
-  glUseProgram(this->colorProgram);
-  glUniformMatrix4fv(this->c_uCamLoc, 1, GL_FALSE, initCamMat);
-  glUseProgram(this->textureProgram);
-  glUniformMatrix4fv(this->p_uCamLoc, 1, GL_FALSE, initCamMat);
   glUseProgram(this->generalProgram);
   glUniformMatrix4fv(this->g_uCamLoc, 1, GL_FALSE, initCamMat);
 }
@@ -221,11 +151,6 @@ void OpenGLContext::setProjection(float left, float right, float top, float bot)
   };
   memcpy(this->projection, projMat, 16 * sizeof(float));
   
-  glUseProgram(this->colorProgram);
-  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->textureProgram);
-  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->generalProgram);
   glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 
@@ -235,11 +160,6 @@ void OpenGLContext::translate(float x, float y) {
   this->projection[11] += this->projection[8] * x + this->projection[9] * y;
   this->projection[15] += this->projection[12]* x + this->projection[13]* y;
   
-  glUseProgram(this->colorProgram);
-  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->textureProgram);
-  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->generalProgram);
   glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 
@@ -260,11 +180,6 @@ void OpenGLContext::rotate(float rad) {
   this->projection[12] = temp[12] * cr + temp[13] * sr;
   this->projection[13] = temp[12] * -sr + temp[13] * cr;
   
-  glUseProgram(this->colorProgram);
-  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->textureProgram);
-  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->generalProgram);
   glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 void OpenGLContext::scale(float sx, float sy) {
@@ -277,11 +192,6 @@ void OpenGLContext::scale(float sx, float sy) {
   this->projection[12] *= sx;
   this->projection[13] *= sy;
   
-  glUseProgram(this->colorProgram);
-  glUniformMatrix4fv(this->c_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->textureProgram);
-  glUniformMatrix4fv(this->p_uProjLoc, 1, GL_FALSE, this->projection);
-  glUseProgram(this->generalProgram);
   glUniformMatrix4fv(this->g_uProjLoc, 1, GL_FALSE, this->projection);
 }
 
@@ -295,19 +205,25 @@ void OpenGLContext::setFont(const char* filename) {
   this->texFont = ftgl::texture_font_new_from_memory(this->texAtlas, 32, this->fontFile.data, this->fontFile.size);
 }
 
-void OpenGLContext::initRender() {
+void OpenGLContext::renderBegin() {
   glClearColor(0.2, 0.1, 0.9, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLContext::setColorGeneral(float r, float g, float b, float a) {
+void OpenGLContext::setColor(float r, float g, float b, float a) {
   this->red = r;
   this->green = g;
   this->blue = b;
   this->alpha = a;
 }
 
-void OpenGLContext::drawRectGeneral(float x, float y, float width, float height) {
+void OpenGLContext::setColor(float r, float g, float b) {
+  this->red = r;
+  this->green = g;
+  this->blue = b;
+}
+
+void OpenGLContext::drawRect(float x, float y, float width, float height) {
   GLfloat verticies[] = {x,y, x,y+height, x+width,y, x+width,y+height};
   GLfloat colors[] = {
     this->red,this->green,this->blue,this->alpha,
@@ -335,21 +251,7 @@ void OpenGLContext::drawRectGeneral(float x, float y, float width, float height)
   glDisableVertexAttribArray(this->g_texCoord);
 }
 
-void OpenGLContext::drawRect(float x, float y, float width, float height) {
-  GLfloat verticies[] = {x,y, x,y+height, x+width,y, x+width,y+height};
-  GLfloat colors[] = {0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,0.0,0.0};
-  
-  glUseProgram(this->colorProgram);
-  glVertexAttribPointer(this->c_posLoc, 2, GL_FLOAT, GL_FALSE, 0, verticies);
-  glVertexAttribPointer(this->c_color, 3, GL_FLOAT, GL_FALSE, 0, colors);
-  glEnableVertexAttribArray(this->c_posLoc);
-  glEnableVertexAttribArray(this->c_color);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glDisableVertexAttribArray(this->c_posLoc);
-  glDisableVertexAttribArray(this->c_color);
-}
-
-void OpenGLContext::drawImageGeneral(GLuint tex, float x, float y, float width, float height) {
+void OpenGLContext::drawImage(GLuint tex, float x, float y, float width, float height) {
   GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
   GLfloat colors[] = {
     1.0,1.0,1.0,1.0,
@@ -376,27 +278,8 @@ void OpenGLContext::drawImageGeneral(GLuint tex, float x, float y, float width, 
   glDisableVertexAttribArray(this->g_texCoord);
 }
 
-void OpenGLContext::drawImage(GLuint tex, float x, float y, float width, float height) {
-  GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
-  GLfloat uvCoords[] = {0.0f,0.0f, 0.0f,1.0f, 1.0f,0.0f, 1.0f,1.0f};
-
-  glUseProgram(this->textureProgram);
-  glActiveTexture(GL_TEXTURE1);
-
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glUniform1i(this->p_texLoc, 1);
-  glVertexAttribPointer(this->p_posLoc, 2, GL_FLOAT, GL_FALSE, 0, positions);
-  glVertexAttribPointer(this->p_texCoord, 2, GL_FLOAT, GL_FALSE, 0, uvCoords);
-  glEnableVertexAttribArray(this->p_posLoc);
-  glEnableVertexAttribArray(this->p_texCoord);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glDisableVertexAttribArray(this->p_posLoc);
-  glDisableVertexAttribArray(this->p_texCoord);
-}
-
-void OpenGLContext::drawText(const char* text, float x, float y, float r, float g, float b) {
-  GLfloat verticies[24*strlen(text)]; // 24 floats per char
+void OpenGLContext::drawText(const char* text, float x, float y) {
+  GLfloat verticies[48*strlen(text)]; // 48 floats per char
   float currx = 0.0; // text goes to the right
 
   // add in each character to verticies
@@ -421,35 +304,59 @@ void OpenGLContext::drawText(const char* text, float x, float y, float r, float 
     float u1 = glyph->s1;
     float v1 = glyph->t1;
 
-    verticies[i*24 + 0] = x0;
-    verticies[i*24 + 1] = y0;
-    verticies[i*24 + 2] = u0;
-    verticies[i*24 + 3] = v0;
+    verticies[i*48 + 0] = x0;
+    verticies[i*48 + 1] = y0;
+    verticies[i*48 + 2] = u0;
+    verticies[i*48 + 3] = v0;
+    verticies[i*48 + 4] = 0.0;
+    verticies[i*48 + 5] = 0.0;
+    verticies[i*48 + 6] = 0.0;
+    verticies[i*48 + 7] = this->alpha;
 
-    verticies[i*24 + 4] = x0;
-    verticies[i*24 + 5] = y1;
-    verticies[i*24 + 6] = u0;
-    verticies[i*24 + 7] = v1;
+    verticies[i*48 + 8] = x0;
+    verticies[i*48 + 9] = y1;
+    verticies[i*48 + 10] = u0;
+    verticies[i*48 + 11] = v1;
+    verticies[i*48 + 12] = 0.0;
+    verticies[i*48 + 13] = 0.0;
+    verticies[i*48 + 14] = 0.0;
+    verticies[i*48 + 15] = this->alpha;
 
-    verticies[i*24 + 8] = x1;
-    verticies[i*24 + 9] = y0;
-    verticies[i*24 + 10] = u1;
-    verticies[i*24 + 11] = v0;
+    verticies[i*48 + 16] = x1;
+    verticies[i*48 + 17] = y0;
+    verticies[i*48 + 18] = u1;
+    verticies[i*48 + 19] = v0;
+    verticies[i*48 + 20] = 0.0;
+    verticies[i*48 + 21] = 0.0;
+    verticies[i*48 + 22] = 0.0;
+    verticies[i*48 + 23] = this->alpha;
 
-    verticies[i*24 + 12] = x1;
-    verticies[i*24 + 13] = y1;
-    verticies[i*24 + 14] = u1;
-    verticies[i*24 + 15] = v1;
+    verticies[i*48 + 24] = x1;
+    verticies[i*48 + 25] = y1;
+    verticies[i*48 + 26] = u1;
+    verticies[i*48 + 27] = v1;
+    verticies[i*48 + 28] = 0.0;
+    verticies[i*48 + 29] = 0.0;
+    verticies[i*48 + 30] = 0.0;
+    verticies[i*48 + 31] = this->alpha;
 
-    verticies[i*24 + 16] = x0;
-    verticies[i*24 + 17] = y1;
-    verticies[i*24 + 18] = u0;
-    verticies[i*24 + 19] = v1;
+    verticies[i*48 + 32] = x0;
+    verticies[i*48 + 33] = y1;
+    verticies[i*48 + 34] = u0;
+    verticies[i*48 + 35] = v1;
+    verticies[i*48 + 36] = 0.0;
+    verticies[i*48 + 37] = 0.0;
+    verticies[i*48 + 38] = 0.0;
+    verticies[i*48 + 39] = this->alpha;
 
-    verticies[i*24 + 20] = x1;
-    verticies[i*24 + 21] = y0;
-    verticies[i*24 + 22] = u1;
-    verticies[i*24 + 23] = v0;
+    verticies[i*48 + 40] = x1;
+    verticies[i*48 + 41] = y0;
+    verticies[i*48 + 42] = u1;
+    verticies[i*48 + 43] = v0;
+    verticies[i*48 + 44] = 0.0;
+    verticies[i*48 + 45] = 0.0;
+    verticies[i*48 + 46] = 0.0;
+    verticies[i*48 + 47] = this->alpha;
 
     currx += glyph->advance_x;
   }
@@ -465,22 +372,25 @@ void OpenGLContext::drawText(const char* text, float x, float y, float r, float 
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_DYNAMIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  glUseProgram(this->textureProgram);
-  glUniform4f(this->p_color, r, g, b, 0.0); // color
+  glUseProgram(this->generalProgram);
+  glUniform4f(this->g_uColorTint, this->red, this->green, this->blue, 0.0); // color
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, this->texAtlas->id);
-  glUniform1i(this->p_texLoc, 0);
+  glUniform1i(this->g_texLoc, 0);
 
   glBindBuffer(GL_ARRAY_BUFFER, bufferLoc);
-  glEnableVertexAttribArray(this->p_posLoc);
-  glEnableVertexAttribArray(this->p_texCoord);
-  glVertexAttribPointer(this->p_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glVertexAttribPointer(this->p_texCoord, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (const void*)8);
+  glEnableVertexAttribArray(this->g_posLoc);
+  glEnableVertexAttribArray(this->g_texCoord);
+  glEnableVertexAttribArray(this->g_color);
+  glVertexAttribPointer(this->g_posLoc, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), 0);
+  glVertexAttribPointer(this->g_texCoord, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const void*)8);
+  glVertexAttribPointer(this->g_color, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const void*)16);
 
   glDrawArrays(GL_TRIANGLES, 0, strlen(text)*6);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  glDisableVertexAttribArray(this->p_posLoc);
-  glDisableVertexAttribArray(this->p_texCoord);
-  glUniform4f(this->p_color, 0.0, 0.0, 0.0, 0.0);// reset color
+  glDisableVertexAttribArray(this->g_posLoc);
+  glDisableVertexAttribArray(this->g_texCoord);
+  glDisableVertexAttribArray(this->g_color);
+  glUniform4f(this->g_uColorTint, 0.0, 0.0, 0.0, 0.0); // reset color tint
 }
