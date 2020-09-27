@@ -4,7 +4,14 @@
 #include <assert.h>
 #include <map>
 
-std::map<const char*, GLuint> textures; // all the textures we'll load
+struct char_cmp {
+    bool operator () (const char *a,const char *b) const {
+        return strcmp(a,b)<0;
+    }
+};
+typedef std::map<const char *, int, char_cmp> strmap;
+
+strmap textures; // all the textures we'll load
 
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
 static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop info_ptr);
@@ -160,13 +167,13 @@ GLuint loadImage(const char* filename, const char* name) {
   GLuint buffer = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
   releaseImage(&imageData);
   
-  textures[name] = buffer;
+  textures.insert(strmap::value_type(name, buffer));
   
   return buffer;
 }
 
 GLuint getImage(const char* name) {
-  std::map<const char*, GLuint>::iterator it;
+  strmap::iterator it;
   
   it = textures.find(name);
   if (it == textures.end()) {

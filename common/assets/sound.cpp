@@ -3,7 +3,14 @@
 #include <map>
 #include <limits.h>
 
-std::map<const char*, ALuint> sounds; // all the sounds we'll load
+struct char_cmp {
+    bool operator () (const char *a,const char *b) const {
+        return strcmp(a,b)<0;
+    }
+};
+typedef std::map<const char *, int, char_cmp> strmap;
+
+strmap sounds; // all the sounds we'll load
 
 STREAM_DATA::STREAM_DATA(FileData fd) : asset(fd) {
   STREAM_DATA::offset = 0;
@@ -92,8 +99,7 @@ ALuint loadSound(const char* filename, const char* name) {
     format = AL_FORMAT_MONO16;
   else if(sfinfo.channels == 2)
     format = AL_FORMAT_STEREO16;
-  else
-  {
+  else {
     LOG("Unsupported channel count: %d", sfinfo.channels);
     sf_close(sndfile);
     return 0;
@@ -103,8 +109,7 @@ ALuint loadSound(const char* filename, const char* name) {
   membuf = (short*)malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short));
 
   num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
-  if(num_frames < 1)
-  {
+  if(num_frames < 1) {
     free(membuf);
     sf_close(sndfile);
     LOG("Failed to read samples in %s (%lld)", filename, num_frames);
@@ -117,6 +122,16 @@ ALuint loadSound(const char* filename, const char* name) {
   ALuint buffer = 0;
   alGenBuffers(1, &buffer);
   alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
+  
+  // generate source
+  ALuint source;
+  alGenSources(1, &source);
+  alSourcei(source, AL_BUFFER, buffer);
+  alSourcef(source, AL_PITCH, 1);
+  alSourcef(source, AL_GAIN, 1);
+  alSource3f(source, AL_POSITION, 0, 0, 0);
+  alSource3f(source, AL_VELOCITY, 0, 0, 0);
+  alSourcei(source, AL_LOOPING, AL_FALSE);
 
   // free memory
   free(membuf);
@@ -125,21 +140,20 @@ ALuint loadSound(const char* filename, const char* name) {
 
   // Check if an error occured, and clean up if so.
   err = alGetError();
-  if(err != AL_NO_ERROR)
-  {
+  if(err != AL_NO_ERROR) {
     LOG("OpenAL Error: %s", alGetString(err));
     if(buffer && alIsBuffer(buffer)) alDeleteBuffers(1, &buffer);
     return 0;
   }
   
   // put buffer in sounds map
-  sounds[name] = buffer;
+  sounds.insert(strmap::value_type(name, buffer));
 
   return buffer;
 }
 
 void playSound(const char* name) {
-  std::map<const char*, ALuint>::iterator it;
+  strmap::iterator it;
   ALuint soundBuffer;
   
   it = sounds.find(name);
@@ -152,3 +166,10 @@ void playSound(const char* name) {
   alSourcePlay(soundBuffer);
 }
 
+void initAudio() {
+  ALCdevice *device = alcOpenDevice(NULL);
+  if (!device) LOG("COULDN'T OPEN AUDIO DEVICE!!");
+  ALCcontext *context = alcCreateContext(device, NULL);
+  if (!context) LOG("COULDN'T OPEN AUDIO CONTEXT");
+  if (alcMakeContextCurrent(context) == ALC_FALSE) LOG("CONTEXT COULDN'T BE MADE CURRENT");
+}

@@ -14,6 +14,7 @@ public:
     sf_count_t offset;
 };
 
+void initAudio();
 ALuint loadSound(const char* filename, const char* name);
 void playSound(const char* name);
 
