@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #include "game.h"
+#include "application.h"
 
 @interface ViewController () {
 }
@@ -30,7 +31,7 @@
 // setup
 - (void)setupGL {
     [EAGLContext setCurrentContext:self.context];
-    glSetup([[self view] bounds].size.width, [[self view] bounds].size.height);
+    getCurrentApplication()->initContext();
 }
 
 // on load
@@ -58,12 +59,17 @@
 
 // orientation change
 - (void)orientationChanged:(NSNotification *)note {
-    handleResize([[self view] bounds].size.width, [[self view] bounds].size.height);
+  getCurrentApplication()->handleResize([[self view] bounds].size.width, [[self view] bounds].size.height);
+}
+
+// update possibly?
+- (void)update {
+  //TODO, is self.timeSinceLastUpdate a thing?
 }
 
 // render
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    glRender();
+  getCurrentApplication()->render();
 }
 
 // touch events

@@ -196,10 +196,6 @@ void OpenGLContext::scale(float sx, float sy) {
 }
 
 void OpenGLContext::setFont(const char* filename) {
-  if (this->fontFile.data != nullptr) {
-    freeAsset(this->fontFile);
-  }
-  
   this->fontFile = getAsset(filename);//NOTE: THIS ISN'T FREED BC WE NEED TO ADD TO TEX ATLAS IN REALTIME!!
   this->texAtlas = ftgl::texture_atlas_new(512, 512, 1);
   this->texFont = ftgl::texture_font_new_from_memory(this->texAtlas, 32, this->fontFile.data, this->fontFile.size);

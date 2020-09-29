@@ -25,8 +25,9 @@
 #include <cassert>
 
 #include <EGL/egl.h>
-#include "assets/fileasset.h"
+#include "assets/fileasset.h" // have to init asset manager
 #include "game.h"
+#include "application.h"
 
 #include <android/sensor.h>
 #include <android/log.h>
@@ -150,8 +151,8 @@ static int engine_init_display(struct engine* engine) {
         auto info = glGetString(name);
         LOGI("OpenGL Info: %s", info);
     }
-    // Initialize GL state
-    glSetup(w, h);
+    // Initialize render context
+    getCurrentApplication()->initContext();
 
     return 0;
 }
@@ -165,7 +166,7 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
-    glRender();
+    getCurrentApplication()->render();
 
     eglSwapBuffers(engine->display, engine->surface);
 }
@@ -248,7 +249,8 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             engine->animating = 1;
             break;
         case APP_CMD_CONTENT_RECT_CHANGED:
-            handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
+//            handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
+            getCurrentApplication()->handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
             break;
         case APP_CMD_LOST_FOCUS:
             // Stop animating.

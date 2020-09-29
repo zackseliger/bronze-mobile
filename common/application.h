@@ -5,10 +5,11 @@
 
 class Application {
 public:
-    Application();
-    void update();
-    void render();
-    void init();
+  Application();
+  virtual void handleResize(float, float);
+  virtual void initContext();
+  virtual void update();
+  virtual void render();
 };
 
 Application* getCurrentApplication();
