@@ -124,20 +124,30 @@ add_library(openal ${AL_SOURCES}
 target_include_directories(openal PRIVATE ../lib/openal/include ../lib/openal)
 target_link_libraries(openal OpenSLES)
 
-# build common game files as a static lib
+# bronze
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14 -Wall -Werror")
-AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common GAME_SOURCES) # all source files in common/
-AUX_SOURCE_DIRECTORY(${PARENT_DIR}/common/assets GAME_SOURCES_ASSETS) # source files in common/assets
-add_library(game_common STATIC ${GAME_SOURCES} ${GAME_SOURCES_ASSETS})
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/bronze BRONZE_SOURCES)
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/lib/bronze/assets BRONZE_SOURCES2)
+add_library(bronze STATIC ${BRONZE_SOURCES} ${BRONZE_SOURCES2})
 # lib dependencies
-target_link_libraries(game_common GLESv2 png freetype freetypeGL sndfile openal)
+target_link_libraries(bronze GLESv2 png freetype freetypeGL sndfile openal)
 # includes
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/libpng)
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/freetypeGL)
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/sndfile)
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/lib/openal/include)
-target_include_directories(game_common PUBLIC ${PARENT_DIR}/common)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/libpng)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/freetypeGL)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/sndfile)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/openal/include)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/bronze)
+
+# OUR CODE. Build shared code
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14 -Wall -Werror")
+AUX_SOURCE_DIRECTORY(${PARENT_DIR}/shared SHARED_SOURCES)
+add_library(shared STATIC ${SHARED_SOURCES} ../lib/bronze/application.cpp) # NOTE: we MUST add application.cpp as a source here so it is LINKED with the rest of the program!!!
+# lib dependencies
+target_link_libraries(shared bronze)
+# include dirs
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/bronze)
+target_include_directories(bronze PUBLIC ${PARENT_DIR}/shared)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
@@ -160,7 +170,8 @@ target_include_directories(native-activity PRIVATE
 # add lib dependencies
 target_link_libraries(native-activity
     android
-    game_common
+    shared
+    bronze
     native_app_glue
     EGL
     log)

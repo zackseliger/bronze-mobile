@@ -150,6 +150,7 @@ static int engine_init_display(struct engine* engine) {
         auto info = glGetString(name);
         LOGI("OpenGL Info: %s", info);
     }
+
     // Initialize render context
     getCurrentApplication()->context->init();
     // Initialize application

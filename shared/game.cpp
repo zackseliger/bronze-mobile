@@ -1,27 +1,21 @@
 #include "game.h"
 #include <png.h>
-#include "utils.h"
-#include <assert.h>
-#include "application.h"
+#include <utils.h>
 
-//rand and strings
+// rand and strings
 #include <stdlib.h>
 #include <time.h>
 #include <string>
 
-//assets
-#include "assets/fileasset.h"
-#include "assets/image.h"
-#include "assets/sound.h"
+// assets
+#include <assets/fileasset.h>
+#include <assets/image.h>
+#include <assets/sound.h>
 
-//audio
-#include <sndfile.h>
-#include <AL/al.h>
-#include <AL/alc.h>
-
-//graphics
-#include "opengl.h"
-#include "context.h"
+// graphics
+#include <opengl.h>
+#include <application.h>
+#include <context.h>
 
 // stuff that should be in the engine
 double screenWidth;
@@ -37,7 +31,6 @@ public:
   float pointY = -100;
   
   TestApplication() {
-    LOG("WOOO");
     this->context = new OpenGLContext();
   }
   
