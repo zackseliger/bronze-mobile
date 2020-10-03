@@ -31,7 +31,8 @@
 // setup
 - (void)setupGL {
     [EAGLContext setCurrentContext:self.context];
-    getCurrentApplication()->initContext();
+    getCurrentApplication()->context->init();
+    getCurrentApplication()->init();
 }
 
 // on load
@@ -75,22 +76,22 @@
 // touch events
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     for (UITouch* touch in touches) {
-        startTouch((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+        getCurrentApplication()->handleTouchStart((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
     }
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-        endTouch((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+        getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
     }
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-        moveTouch((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+        getCurrentApplication()->handleTouchMove((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
     }
 }
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-        endTouch((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+        getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
     }
 }
 

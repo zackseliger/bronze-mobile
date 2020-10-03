@@ -5,7 +5,32 @@
 #include "assets/fileasset.h"
 #include <freetype-gl.h>
 
-class OpenGLContext {
+class Context {
+public:
+  
+  // init stuff that's needed outside of the constructor
+  virtual void init() = 0;
+  
+  // fonts
+  virtual void setFont(const char*) = 0;
+  
+  // projection/camera stuff
+  virtual void setViewport(float, float, float, float) = 0;
+  virtual void setProjection(float, float, float, float) = 0;
+  virtual void translate(float, float) = 0;
+  virtual void rotate(float) = 0;
+  virtual void scale(float, float) = 0;
+  
+  // drawing functions
+  virtual void renderBegin() = 0;
+  virtual void setColor(float, float, float, float) = 0;
+  virtual void setColor(float, float, float) = 0;
+  virtual void drawRect(float, float, float, float) = 0;
+  virtual void drawImage(GLuint, float, float, float, float) = 0;
+  virtual void drawText(const char*, float, float) = 0;
+};
+
+class OpenGLContext : public Context {
 public:
   // general program
   GLuint generalProgram;
@@ -38,7 +63,7 @@ public:
   void translate(float, float);
   void rotate(float);
   void scale(float, float);
-  
+
   // drawing functions
   void renderBegin();
   void setColor(float, float, float, float);

@@ -26,7 +26,6 @@
 
 #include <EGL/egl.h>
 #include "assets/fileasset.h" // have to init asset manager
-#include "game.h"
 #include "application.h"
 
 #include <android/sensor.h>
@@ -152,7 +151,9 @@ static int engine_init_display(struct engine* engine) {
         LOGI("OpenGL Info: %s", info);
     }
     // Initialize render context
-    getCurrentApplication()->initContext();
+    getCurrentApplication()->context->init();
+    // Initialize application
+    getCurrentApplication()->init();
 
     return 0;
 }
@@ -208,13 +209,13 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
         // event handling
         if (action == AMOTION_EVENT_ACTION_DOWN || action == AMOTION_EVENT_ACTION_POINTER_DOWN) {
-            startTouch((int)id, x, y);
+            getCurrentApplication()->handleTouchStart((int)id, x, y);
         }
         else if (action == AMOTION_EVENT_ACTION_MOVE) {
-            moveTouch((int)id, x, y);
+            getCurrentApplication()->handleTouchMove((int)id, x, y);
         }
         else if (action == AMOTION_EVENT_ACTION_UP || action == AMOTION_EVENT_ACTION_POINTER_UP) {
-            endTouch((int)id, x, y);
+            getCurrentApplication()->handleTouchEnd((int)id, x, y);
         }
 
         return 1;
@@ -249,7 +250,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             engine->animating = 1;
             break;
         case APP_CMD_CONTENT_RECT_CHANGED:
-//            handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
             getCurrentApplication()->handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
             break;
         case APP_CMD_LOST_FOCUS:

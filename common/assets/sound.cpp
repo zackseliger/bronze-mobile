@@ -3,14 +3,7 @@
 #include <map>
 #include <limits.h>
 
-struct char_cmp {
-    bool operator () (const char *a,const char *b) const {
-        return strcmp(a,b)<0;
-    }
-};
-typedef std::map<const char *, int, char_cmp> strmap;
-
-strmap sounds; // all the sounds we'll load
+static strmap sounds; // all the sounds we'll load
 
 STREAM_DATA::STREAM_DATA(FileData fd) : asset(fd) {
   STREAM_DATA::offset = 0;

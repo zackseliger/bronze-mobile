@@ -4,14 +4,7 @@
 #include <assert.h>
 #include <map>
 
-struct char_cmp {
-    bool operator () (const char *a,const char *b) const {
-        return strcmp(a,b)<0;
-    }
-};
-typedef std::map<const char *, int, char_cmp> strmap;
-
-strmap textures; // all the textures we'll load
+static strmap textures; // all the textures we'll load
 
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
 static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop info_ptr);
