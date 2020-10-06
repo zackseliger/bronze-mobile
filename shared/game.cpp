@@ -1,6 +1,7 @@
 #include "game.h"
 #include <png.h>
 #include <utils.h>
+#include <actor.h>
 
 // rand and strings
 #include <stdlib.h>
@@ -17,12 +18,28 @@
 #include <application.h>
 #include <context.h>
 
-// stuff that should be in the engine
-double screenWidth;
-double screenHeight;
-double game_width = 500;
-double game_height = 500;
-float xScale, yScale = 1;
+class TestActor : public Actor {
+public:
+  float width;
+  float height;
+  
+  typedef Actor super;
+  
+  TestActor(float x, float y) : super(x, y) {
+    this->width = 50;
+    this->height = 100;
+    LOG("actor: %p", this->context);
+  }
+  
+  void render() {
+    this->context->setColor(0.9, 0.9, 0.9, 1.0);
+    this->context->drawRect(-this->width/2, -this->height/2, this->width, this->height);
+  }
+  
+  void update(float dt) {
+    this->x += 1*dt;
+  }
+};
 
 class TestApplication : public Application {
 public:
@@ -30,8 +47,16 @@ public:
   float pointX = 0;
   float pointY = -100;
   
-  TestApplication() {
+  // Actor thing
+  TestActor* test;
+  
+  // super
+  typedef Application super;
+  
+  TestApplication() : super(500,500) {
     this->context = new OpenGLContext();
+    this->test = new TestActor(-250, 0);
+    LOG("app: %p", this->context);
   }
   
   void init() {
@@ -77,30 +102,9 @@ public:
       this->context->drawRect(100,100,20,20);
     this->context->rotate(-this->pointX/100);
     this->context->translate(-20,-20);
-  }
-  
-  void handleResize(float width, float height) {
-    screenWidth = width;
-    screenHeight = height;
-      
-    float ratio = screenWidth / screenHeight;
-    if (ratio > game_width / game_height) {
-      xScale = screenHeight / game_height;
-      yScale = xScale;
-    }
-    else {
-      xScale = screenWidth / game_width;
-      yScale = xScale;
-    }
     
-    // redo our projection matrix
-    float right = (game_width/2) + (screenWidth/xScale - game_width)/2;
-    float left = (-game_width/2) + (-screenWidth/xScale + game_width)/2;
-    float top = (-game_height/2) + (-screenHeight/yScale + game_height)/2;
-    float bot = (game_height/2) + (screenHeight/yScale - game_height)/2;
-    
-    this->context->setViewport(0, 0, width, height);
-    this->context->setProjection(left, right, top, bot);
+    this->test->update(1.0);
+    this->test->draw();
   }
   
   // touch events

@@ -7,9 +7,20 @@
 class Application {
 public:
   Application();
+  Application(float, float); // game width and height
   
+  // drawing context
   Context* context;
   
+  // screen information
+  float screenWidth;
+  float screenHeight;
+  float gameWidth;
+  float gameHeight;
+  float xScale;
+  float yScale;
+  
+  // general functions
   virtual void init();
   virtual void update();
   virtual void render();

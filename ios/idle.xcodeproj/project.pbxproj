@@ -265,6 +265,7 @@
 		148BC7D12528409600915ED5 /* windows.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76D2528409500915ED5 /* windows.c */; };
 		148BC7D22528409600915ED5 /* float32.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76E2528409500915ED5 /* float32.c */; };
 		148BC7D32528409600915ED5 /* audio_detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76F2528409500915ED5 /* audio_detect.c */; };
+		148BC7D8252C106A00915ED5 /* actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D6252C106A00915ED5 /* actor.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -774,6 +775,8 @@
 		148BC76E2528409500915ED5 /* float32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = float32.c; sourceTree = "<group>"; };
 		148BC76F2528409500915ED5 /* audio_detect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = audio_detect.c; sourceTree = "<group>"; };
 		148BC7702528409500915ED5 /* sfendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sfendian.h; sourceTree = "<group>"; };
+		148BC7D6252C106A00915ED5 /* actor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = actor.cpp; sourceTree = "<group>"; };
+		148BC7D7252C106A00915ED5 /* actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = actor.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1335,14 +1338,16 @@
 		148BC6D825283F9500915ED5 /* bronze */ = {
 			isa = PBXGroup;
 			children = (
+				148BC6DB25283F9500915ED5 /* opengl.h */,
+				148BC6E025283F9500915ED5 /* assets */,
 				148BC6D925283F9500915ED5 /* utils.h */,
 				148BC6DA25283F9500915ED5 /* utils.cpp */,
-				148BC6DB25283F9500915ED5 /* opengl.h */,
-				148BC6DC25283F9500915ED5 /* application.h */,
-				148BC6DD25283F9500915ED5 /* context.cpp */,
 				148BC6DE25283F9500915ED5 /* context.h */,
+				148BC6DD25283F9500915ED5 /* context.cpp */,
+				148BC6DC25283F9500915ED5 /* application.h */,
 				148BC6DF25283F9500915ED5 /* application.cpp */,
-				148BC6E025283F9500915ED5 /* assets */,
+				148BC7D7252C106A00915ED5 /* actor.h */,
+				148BC7D6252C106A00915ED5 /* actor.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1827,6 +1832,7 @@
 				145D2F482510C51C00F84622 /* ftgzip.c in Sources */,
 				145D2BD02510BB5600F84622 /* mixer_sse3.cpp in Sources */,
 				145D2BBB2510BB5600F84622 /* coreaudio.cpp in Sources */,
+				148BC7D8252C106A00915ED5 /* actor.cpp in Sources */,
 				148BC7852528409600915ED5 /* wavlike.c in Sources */,
 				145D2F292510C4B600F84622 /* ftgasp.c in Sources */,
 				146FBD7224FA0D96004ABF8F /* pngmem.c in Sources */,
