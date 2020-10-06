@@ -370,6 +370,8 @@ void android_main(struct android_app* state) {
             }
         }
 
+        getCurrentApplication()->update();
+
         if (engine.animating) {
             // Drawing is throttled to the screen update rate, so there
             // is no need to do timing here.

@@ -266,6 +266,7 @@
 		148BC7D22528409600915ED5 /* float32.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76E2528409500915ED5 /* float32.c */; };
 		148BC7D32528409600915ED5 /* audio_detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76F2528409500915ED5 /* audio_detect.c */; };
 		148BC7D8252C106A00915ED5 /* actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D6252C106A00915ED5 /* actor.cpp */; };
+		148BC7DB252CEA3C00915ED5 /* collection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D9252CEA3C00915ED5 /* collection.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -777,6 +778,8 @@
 		148BC7702528409500915ED5 /* sfendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sfendian.h; sourceTree = "<group>"; };
 		148BC7D6252C106A00915ED5 /* actor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = actor.cpp; sourceTree = "<group>"; };
 		148BC7D7252C106A00915ED5 /* actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = actor.h; sourceTree = "<group>"; };
+		148BC7D9252CEA3C00915ED5 /* collection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collection.cpp; sourceTree = "<group>"; };
+		148BC7DA252CEA3C00915ED5 /* collection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = collection.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1348,6 +1351,8 @@
 				148BC6DF25283F9500915ED5 /* application.cpp */,
 				148BC7D7252C106A00915ED5 /* actor.h */,
 				148BC7D6252C106A00915ED5 /* actor.cpp */,
+				148BC7DA252CEA3C00915ED5 /* collection.h */,
+				148BC7D9252CEA3C00915ED5 /* collection.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1628,6 +1633,7 @@
 				148BC6E825283F9500915ED5 /* context.cpp in Sources */,
 				148BC7BF2528409600915ED5 /* chanmap.c in Sources */,
 				14029AC325099D0B007FA72C /* texture-font.c in Sources */,
+				148BC7DB252CEA3C00915ED5 /* collection.cpp in Sources */,
 				145D2B9E2510BB5600F84622 /* bformatdec.cpp in Sources */,
 				145D2BA32510BB5600F84622 /* filter.cpp in Sources */,
 				148BC7AF2528409600915ED5 /* decode.c in Sources */,

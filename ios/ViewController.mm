@@ -66,6 +66,7 @@
 // update possibly?
 - (void)update {
   //TODO, is self.timeSinceLastUpdate a thing?
+  getCurrentApplication()->update();
 }
 
 // render

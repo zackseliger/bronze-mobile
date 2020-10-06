@@ -9,6 +9,7 @@ Application::Application() {
   this->yScale = 1;
   setCurrentApplication(this);
 }
+
 Application::Application(float w, float h) {
   this->gameWidth = w;
   this->gameHeight = h;
@@ -18,7 +19,9 @@ Application::Application(float w, float h) {
 }
 
 void Application::init() { LOG("Default Application init"); }
+
 void Application::update() { LOG("Default Application update"); }
+
 void Application::render() { LOG("Default Application render"); }
 
 void Application::handleResize(float w, float h) {
@@ -45,15 +48,22 @@ void Application::handleResize(float w, float h) {
   this->context->setViewport(0, 0, this->screenWidth, this->screenHeight);
   this->context->setProjection(left, right, top, bot);
 }
+
 void Application::handleTouchStart(int, float, float) { LOG("Default Application handleTouchStart"); }
+
 void Application::handleTouchMove(int, float, float) { LOG("Default Application handleTouchMove"); }
+
 void Application::handleTouchEnd(int, float, float) { LOG("Default Application handleTouchEnd"); }
 
+
+// global function to get the current application
 Application* getCurrentApplication() {
   assert(currentApplication != nullptr);
   return currentApplication;
 }
 
+
+// global function to set the current application
 void setCurrentApplication(Application* application) {
   currentApplication = application;
 }

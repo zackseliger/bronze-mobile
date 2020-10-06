@@ -2,6 +2,7 @@
 #include <png.h>
 #include <utils.h>
 #include <actor.h>
+#include <collection.h>
 
 // rand and strings
 #include <stdlib.h>
@@ -23,12 +24,14 @@ public:
   float width;
   float height;
   
+  float speed;
+  
   typedef Actor super;
   
   TestActor(float x, float y) : super(x, y) {
+    this->speed = 1.0;
     this->width = 50;
     this->height = 100;
-    LOG("actor: %p", this->context);
   }
   
   void render() {
@@ -37,7 +40,10 @@ public:
   }
   
   void update(float dt) {
-    this->x += 1*dt;
+    this->x += this->speed*dt;
+    
+    if (this->x > 250) this->speed = -1;
+    else if (this->x < -250) this->speed = 1;
   }
 };
 
@@ -47,16 +53,18 @@ public:
   float pointX = 0;
   float pointY = -100;
   
-  // Actor thing
-  TestActor* test;
+  // Actor stuff
+  Collection* mainCollection;
   
   // super
   typedef Application super;
   
   TestApplication() : super(500,500) {
     this->context = new OpenGLContext();
-    this->test = new TestActor(-250, 0);
-    LOG("app: %p", this->context);
+    this->mainCollection = new Collection();
+    this->mainCollection->add(new TestActor(-250, 0));
+    this->mainCollection->add(new TestActor(-250, 200));
+    this->mainCollection->add(new TestActor(-250, -200));
   }
   
   void init() {
@@ -103,8 +111,11 @@ public:
     this->context->rotate(-this->pointX/100);
     this->context->translate(-20,-20);
     
-    this->test->update(1.0);
-    this->test->draw();
+    this->mainCollection->draw();
+  }
+  
+  void update() {
+    this->mainCollection->update(1.0);
   }
   
   // touch events
