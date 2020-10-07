@@ -61,6 +61,7 @@ public:
   
   TestApplication() : super(500,500) {
     this->context = new OpenGLContext();
+    this->timestep = new Timestep(60);
     this->mainCollection = new Collection();
     this->mainCollection->add(new TestActor(-250, 0));
     this->mainCollection->add(new TestActor(-250, 200));
@@ -115,7 +116,8 @@ public:
   }
   
   void update() {
-    this->mainCollection->update(1.0);
+    this->timestep->update();
+    this->mainCollection->update(this->timestep->deltaTime);
   }
   
   // touch events

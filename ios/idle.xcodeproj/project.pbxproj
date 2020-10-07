@@ -267,6 +267,7 @@
 		148BC7D32528409600915ED5 /* audio_detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 148BC76F2528409500915ED5 /* audio_detect.c */; };
 		148BC7D8252C106A00915ED5 /* actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D6252C106A00915ED5 /* actor.cpp */; };
 		148BC7DB252CEA3C00915ED5 /* collection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D9252CEA3C00915ED5 /* collection.cpp */; };
+		148BC7DE252E659B00915ED5 /* timestep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DC252E659B00915ED5 /* timestep.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -780,6 +781,8 @@
 		148BC7D7252C106A00915ED5 /* actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = actor.h; sourceTree = "<group>"; };
 		148BC7D9252CEA3C00915ED5 /* collection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = collection.cpp; sourceTree = "<group>"; };
 		148BC7DA252CEA3C00915ED5 /* collection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = collection.h; sourceTree = "<group>"; };
+		148BC7DC252E659B00915ED5 /* timestep.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timestep.cpp; sourceTree = "<group>"; };
+		148BC7DD252E659B00915ED5 /* timestep.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timestep.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1353,6 +1356,8 @@
 				148BC7D6252C106A00915ED5 /* actor.cpp */,
 				148BC7DA252CEA3C00915ED5 /* collection.h */,
 				148BC7D9252CEA3C00915ED5 /* collection.cpp */,
+				148BC7DD252E659B00915ED5 /* timestep.h */,
+				148BC7DC252E659B00915ED5 /* timestep.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1840,6 +1845,7 @@
 				145D2BBB2510BB5600F84622 /* coreaudio.cpp in Sources */,
 				148BC7D8252C106A00915ED5 /* actor.cpp in Sources */,
 				148BC7852528409600915ED5 /* wavlike.c in Sources */,
+				148BC7DE252E659B00915ED5 /* timestep.cpp in Sources */,
 				145D2F292510C4B600F84622 /* ftgasp.c in Sources */,
 				146FBD7224FA0D96004ABF8F /* pngmem.c in Sources */,
 				145D2F392510C4B600F84622 /* ftcid.c in Sources */,

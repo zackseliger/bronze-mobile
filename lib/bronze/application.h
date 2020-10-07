@@ -1,16 +1,17 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <stdio.h>
 #include "context.h"
+#include "timestep.h"
 
 class Application {
 public:
   Application();
   Application(float, float); // game width and height
   
-  // drawing context
-  Context* context;
+  // misc
+  Context* context; // drawing
+  Timestep* timestep; // delta time
   
   // screen information
   float screenWidth;

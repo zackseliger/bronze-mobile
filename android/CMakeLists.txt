@@ -146,8 +146,8 @@ add_library(shared STATIC ${SHARED_SOURCES} ../lib/bronze/application.cpp) # NOT
 # lib dependencies
 target_link_libraries(shared bronze)
 # include dirs
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/bronze)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/shared)
+target_include_directories(shared PUBLIC ${PARENT_DIR}/lib/bronze)
+target_include_directories(shared PUBLIC ${PARENT_DIR}/shared)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
