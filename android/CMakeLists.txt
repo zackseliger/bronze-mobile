@@ -132,12 +132,12 @@ add_library(bronze STATIC ${BRONZE_SOURCES} ${BRONZE_SOURCES2})
 # lib dependencies
 target_link_libraries(bronze GLESv2 png freetype freetypeGL sndfile openal)
 # includes
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/libpng)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/freetypeGL)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/sndfile)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/openal/include)
-target_include_directories(bronze PUBLIC ${PARENT_DIR}/lib/bronze)
+target_include_directories(bronze PUBLIC ../lib/libpng)
+target_include_directories(bronze PUBLIC ../lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
+target_include_directories(bronze PUBLIC ../lib/freetypeGL)
+target_include_directories(bronze PUBLIC ../lib/sndfile)
+target_include_directories(bronze PUBLIC ../lib/openal/include)
+target_include_directories(bronze PUBLIC ../lib/bronze)
 
 # OUR CODE. Build shared code
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14 -Wall -Werror")
@@ -146,8 +146,8 @@ add_library(shared STATIC ${SHARED_SOURCES} ../lib/bronze/application.cpp) # NOT
 # lib dependencies
 target_link_libraries(shared bronze)
 # include dirs
-target_include_directories(shared PUBLIC ${PARENT_DIR}/lib/bronze)
-target_include_directories(shared PUBLIC ${PARENT_DIR}/shared)
+target_include_directories(shared PUBLIC ../lib/bronze)
+target_include_directories(shared PUBLIC ../shared)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")

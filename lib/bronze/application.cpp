@@ -20,9 +20,13 @@ Application::Application(float w, float h) {
 
 void Application::init() { LOG("Default Application init"); }
 
-void Application::update() { LOG("Default Application update"); }
+void Application::update() {
+  this->timestep->update();
+}
 
-void Application::render() { LOG("Default Application render"); }
+void Application::render() {
+  this->context->renderBegin();
+}
 
 void Application::handleResize(float w, float h) {
   this->screenWidth = w;

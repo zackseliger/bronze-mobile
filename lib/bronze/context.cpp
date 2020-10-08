@@ -39,10 +39,6 @@ GLuint buildShaderContext(GLenum type, const GLchar* shaderSrc) {
 }
 
 GLuint buildProgramContext(const char* vertSrc, const char* fragSrc) {
-  // load files
-//  FileData vShaderFile = getAsset(vertexShaderPath);
-//  FileData fShaderFile = getAsset(fragmentShaderPath);
-    
   // create shaders
   GLuint vShader = buildShaderContext(GL_VERTEX_SHADER, vertSrc);
   GLuint fShader = buildShaderContext(GL_FRAGMENT_SHADER, fragSrc);
@@ -202,8 +198,14 @@ void OpenGLContext::setFont(const char* filename) {
 }
 
 void OpenGLContext::renderBegin() {
-  glClearColor(0.2, 0.1, 0.9, 1.0);
+  glClearColor(this->backRed, this->backGreen, this->backBlue, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLContext::setBackground(float r, float g, float b) {
+  this->backRed = r;
+  this->backGreen = g;
+  this->backBlue = b;
 }
 
 void OpenGLContext::setColor(float r, float g, float b, float a) {

@@ -10,6 +10,8 @@ public:
   float rotation;
   Context* context;
   
+  typedef Actor super; // so extended classes have a default super
+  
   // constructors
   Actor();
   Actor(float, float);

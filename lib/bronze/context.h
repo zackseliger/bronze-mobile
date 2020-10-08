@@ -23,6 +23,7 @@ public:
   
   // drawing functions
   virtual void renderBegin() = 0;
+  virtual void setBackground(float, float, float) = 0;
   virtual void setColor(float, float, float, float) = 0;
   virtual void setColor(float, float, float) = 0;
   virtual void drawRect(float, float, float, float) = 0;
@@ -46,6 +47,9 @@ public:
   float blue;
   float alpha;
   GLuint whiteTex;
+  float backRed = 0;
+  float backGreen = 0;
+  float backBlue = 0;
   
   // freetype stuff
   FileData fontFile;
@@ -66,6 +70,7 @@ public:
 
   // drawing functions
   void renderBegin();
+  void setBackground(float, float, float);
   void setColor(float, float, float, float);
   void setColor(float, float, float);
   void drawRect(float, float, float, float);

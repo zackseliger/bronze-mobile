@@ -3,6 +3,7 @@
 #include <utils.h>
 #include <actor.h>
 #include <collection.h>
+#include <cmath>
 
 // rand and strings
 #include <stdlib.h>
@@ -23,10 +24,7 @@ class TestActor : public Actor {
 public:
   float width;
   float height;
-  
   float speed;
-  
-  typedef Actor super;
   
   TestActor(float x, float y) : super(x, y) {
     this->speed = 1.0;
@@ -35,7 +33,7 @@ public:
   }
   
   void render() {
-    this->context->setColor(0.9, 0.9, 0.9, 1.0);
+    this->context->setColor(0.9, 0.9, 0.9, 0.9);
     this->context->drawRect(-this->width/2, -this->height/2, this->width, this->height);
   }
   
@@ -55,9 +53,6 @@ public:
   
   // Actor stuff
   Collection* mainCollection;
-  
-  // super
-  typedef Application super;
   
   TestApplication() : super(500,500) {
     this->context = new OpenGLContext();
@@ -87,18 +82,22 @@ public:
     loadSound("audio/thud6.wav", "thud6");
     loadSound("audio/thud7.wav", "thud7");
     srand(time(NULL));
+    
+    // reset timestep so deltaTime isn't massive on first frame
+    this->timestep->resetTime();
   }
   
   void render() {
-    this->context->renderBegin();
+    super::render();
+    
     // draw textures
     this->context->drawImage(getImage("testImage"), -100, 100, 200, 200);
     
     // draw text
-    this->context->setColor(0.8,0.2,0.2,this->pointX/200);
+    this->context->setColor(0.8,0.2,0.2,std::abs(this->pointX/200));
     this->context->drawText("Hello world. I am here!", -150, -250);
     
-    this->context->setColor(0,0,0,1);
+    this->context->setColor(0.4,0.4,0.4,1);
     this->context->drawRect(this->pointX-5, this->pointY-5, 10, 10);
     this->context->drawRect(-10,-10,20,20);//20x20 block in the center
     
@@ -116,7 +115,8 @@ public:
   }
   
   void update() {
-    this->timestep->update();
+    super::update();
+    
     this->mainCollection->update(this->timestep->deltaTime);
   }
   

@@ -1,24 +1,29 @@
 #include "timestep.h"
 #include <time.h>
+#include "utils.h"
 
 Timestep::Timestep() {
   this->targetFPS = 60;
-  this->lastTime = this->getTime();
+  this->resetTime();
 }
 
 Timestep::Timestep(int fps) {
   this->targetFPS = fps;
+  this->resetTime();
+}
+
+void Timestep::resetTime() {
+  this->currentTime = this->getTime();
   this->lastTime = this->getTime();
 }
 
 float Timestep::getTime() {
-  clock_gettime(CLOCK_MONOTONIC, &this->res);
-  return 1000.0 * this->res.tv_sec + (double) this->res.tv_nsec / 1e6;
+  clock_gettime(CLOCK_MONOTONIC, &this->tp);
+  return 1000.0 * this->tp.tv_sec + (double) this->tp.tv_nsec / 1e6;
 }
 
 void Timestep::update() {
-  clock_gettime(CLOCK_MONOTONIC, &this->res);
   this->currentTime = this->getTime();
-  this->deltaTime = (this->currentTime - this->lastTime) / (1000.0 / this->targetFPS);
+  this->deltaTime = this->targetFPS * (this->currentTime - this->lastTime) / 1000.0;
   this->lastTime = this->currentTime;
 }

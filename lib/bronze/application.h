@@ -9,6 +9,8 @@ public:
   Application();
   Application(float, float); // game width and height
   
+  typedef Application super; // so extended classes automatically have a super
+  
   // misc
   Context* context; // drawing
   Timestep* timestep; // delta time
