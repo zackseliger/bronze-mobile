@@ -171,7 +171,6 @@ target_include_directories(native-activity PRIVATE
 target_link_libraries(native-activity
     android
     shared
-    bronze
     native_app_glue
     EGL
     log)

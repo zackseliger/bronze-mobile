@@ -268,6 +268,7 @@
 		148BC7D8252C106A00915ED5 /* actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D6252C106A00915ED5 /* actor.cpp */; };
 		148BC7DB252CEA3C00915ED5 /* collection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D9252CEA3C00915ED5 /* collection.cpp */; };
 		148BC7DE252E659B00915ED5 /* timestep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DC252E659B00915ED5 /* timestep.cpp */; };
+		148BC7E125327D2100915ED5 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DF25327D2100915ED5 /* scene.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -783,6 +784,8 @@
 		148BC7DA252CEA3C00915ED5 /* collection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = collection.h; sourceTree = "<group>"; };
 		148BC7DC252E659B00915ED5 /* timestep.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timestep.cpp; sourceTree = "<group>"; };
 		148BC7DD252E659B00915ED5 /* timestep.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timestep.h; sourceTree = "<group>"; };
+		148BC7DF25327D2100915ED5 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		148BC7E025327D2100915ED5 /* scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1358,6 +1361,8 @@
 				148BC7D9252CEA3C00915ED5 /* collection.cpp */,
 				148BC7DD252E659B00915ED5 /* timestep.h */,
 				148BC7DC252E659B00915ED5 /* timestep.cpp */,
+				148BC7E025327D2100915ED5 /* scene.h */,
+				148BC7DF25327D2100915ED5 /* scene.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1366,12 +1371,12 @@
 		148BC6E025283F9500915ED5 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				148BC6E125283F9500915ED5 /* sound.h */,
-				148BC6E225283F9500915ED5 /* image.cpp */,
+				148BC6E625283F9500915ED5 /* fileasset.h */,
 				148BC6E325283F9500915ED5 /* fileasset.cpp */,
+				148BC6E125283F9500915ED5 /* sound.h */,
 				148BC6E425283F9500915ED5 /* sound.cpp */,
 				148BC6E525283F9500915ED5 /* image.h */,
-				148BC6E625283F9500915ED5 /* fileasset.h */,
+				148BC6E225283F9500915ED5 /* image.cpp */,
 			);
 			path = assets;
 			sourceTree = "<group>";
@@ -1805,6 +1810,7 @@
 				145D2BA02510BB5600F84622 /* source.cpp in Sources */,
 				148BC7732528409500915ED5 /* sndfile.c in Sources */,
 				145D2BBF2510BB5600F84622 /* dynload.cpp in Sources */,
+				148BC7E125327D2100915ED5 /* scene.cpp in Sources */,
 				14029AC125099D0B007FA72C /* platform.c in Sources */,
 				145D2F4E2510C53F00F84622 /* pfr.c in Sources */,
 				145D2F542510C56700F84622 /* psnames.c in Sources */,

@@ -3,6 +3,7 @@
 
 #include "context.h"
 #include "timestep.h"
+#include "scene.h"
 
 class Application {
 public:
@@ -14,6 +15,7 @@ public:
   // misc
   Context* context; // drawing
   Timestep* timestep; // delta time
+  SceneManager* sceneManager; // scenes
   
   // screen information
   float screenWidth;
