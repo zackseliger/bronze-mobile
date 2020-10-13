@@ -9,6 +9,7 @@ class Application {
 public:
   Application();
   Application(float, float); // game width and height
+  Application(float, float, Context*); // game width, game height, context
   
   typedef Application super; // so extended classes automatically have a super
   

@@ -106,23 +106,18 @@ public:
 
 class TestApplication : public Application {
 public:
-  TestApplication() : super(500,500) {
-    this->context = new OpenGLContext();
-    this->timestep = new Timestep(60);
-    this->sceneManager = new SceneManager();
-  }
+  TestApplication() : super(500, 500, new OpenGLContext()) {}
   
   void init() {
+    super::init();
+    
     // set font
     this->context->setFont("Poetsen.ttf");
-
+    
     // setup image
     loadImage("image/pngtest.png", "testImage");
 
-    //audio
-    initAudio();
-
-    // setup audio
+    // load sounds
     loadSound("audio/thud1.wav", "thud1");
     loadSound("audio/thud2.wav", "thud2");
     loadSound("audio/thud3.wav", "thud3");
@@ -132,21 +127,12 @@ public:
     loadSound("audio/thud7.wav", "thud7");
     srand(time(NULL));
     
+    // create scenes and switch to initial one
     this->sceneManager->addScene("test", new TestScene());
     this->sceneManager->change("test");
     
     // reset timestep so deltaTime isn't massive on first frame
     this->timestep->resetTime();
-  }
-  
-  void render() {
-    super::render();
-    this->sceneManager->render();
-  }
-  
-  void update() {
-    super::update();
-    this->sceneManager->update(this->timestep->deltaTime);
   }
   
   // touch events

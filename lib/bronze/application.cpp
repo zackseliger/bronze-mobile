@@ -1,12 +1,17 @@
 #include "application.h"
 #include "utils.h"
 #include <assert.h>
+#include "assets/sound.h"
 
 Application::Application() {
   this->gameWidth = 500;
   this->gameHeight = 500;
   this->xScale = 1;
   this->yScale = 1;
+  
+  this->sceneManager = new SceneManager();
+  this->timestep = new Timestep(60);
+  
   setCurrentApplication(this);
 }
 
@@ -15,17 +20,38 @@ Application::Application(float w, float h) {
   this->gameHeight = h;
   this->xScale = 1;
   this->yScale = 1;
+  
+  this->sceneManager = new SceneManager();
+  this->timestep = new Timestep(60);
+  
   setCurrentApplication(this);
 }
 
-void Application::init() { LOG("Default Application init"); }
+Application::Application(float w, float h, Context* ctx) {
+  this->gameWidth = w;
+  this->gameHeight = h;
+  this->xScale = 1;
+  this->yScale = 1;
+  
+  this->sceneManager = new SceneManager();
+  this->timestep = new Timestep(60);
+  this->context = ctx;
+  
+  setCurrentApplication(this);
+}
+
+void Application::init() {
+  initAudio();
+}
 
 void Application::update() {
   this->timestep->update();
+  this->sceneManager->update(this->timestep->deltaTime);
 }
 
 void Application::render() {
   this->context->renderBegin();
+  this->sceneManager->render();
 }
 
 void Application::handleResize(float w, float h) {

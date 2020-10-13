@@ -4,15 +4,19 @@
 #include <time.h>
 
 class Timestep {
+private:
+  struct timespec tp;
+  float currentTime;
+  float lastTime;
+  int targetFPS;
+  
+  float getTime();
+  
 public:
   Timestep();
   Timestep(int);
   
-  struct timespec tp;
   float deltaTime;
-  float currentTime;
-  float lastTime;
-  int targetFPS;
   
   // to reset lastTime and currentTime before update
   // is called after not being called for a while
@@ -20,7 +24,7 @@ public:
   void resetTime();
   
   void update();
-  float getTime();
+  void setTargetFPS(int);
 };
 
 #endif
