@@ -133,7 +133,7 @@ add_library(bronze STATIC ${BRONZE_SOURCES} ${BRONZE_SOURCES2})
 target_link_libraries(bronze GLESv2 png freetype freetypeGL sndfile openal)
 # includes
 target_include_directories(bronze PUBLIC ../lib/libpng)
-target_include_directories(bronze PUBLIC ../lib/freetype/include ${PARENT_DIR}/lib/freetype/src)
+target_include_directories(bronze PUBLIC ../lib/freetype/include ../lib/freetype/src)
 target_include_directories(bronze PUBLIC ../lib/freetypeGL)
 target_include_directories(bronze PUBLIC ../lib/sndfile)
 target_include_directories(bronze PUBLIC ../lib/openal/include)

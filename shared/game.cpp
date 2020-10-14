@@ -5,6 +5,7 @@
 #include <collection.h>
 #include <scene.h>
 #include <cmath>
+#include <event.h>
 
 // rand and strings
 #include <stdlib.h>
@@ -22,8 +23,8 @@
 #include <context.h>
 
 // follows our finger
-float pointX = 0;
-float pointY = -100;
+//float pointX = 0;
+//float pointY = -100;
 
 class TestActor : public Actor {
 public:
@@ -54,6 +55,9 @@ class TestScene : public Scene {
 public:
   // Actor stuff
   Collection* mainCollection;
+  
+  float pointX = 0;
+  float pointY = -100;
   
   // oop
   Context* context;
@@ -96,7 +100,14 @@ public:
   }
   
   void onLoad() {
-    
+    setEventListener(TouchStart, new EventListener([this](Event* e) {
+      TouchEvent* evt = static_cast<TouchEvent*>(e);
+      
+      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+      
+      playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
+    }));
   }
   
   void onUnload() {
@@ -136,21 +147,21 @@ public:
   }
   
   // touch events
-  void handleTouchStart(int id, float x, float y) {
-    pointX = (x - screenWidth/2) / xScale;
-    pointY = (y - screenHeight/2) / yScale;
-    
-    // play a thud sound
-    playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
-  }
-  void handleTouchMove(int id, float x, float y) {
-    pointX = (x - screenWidth/2) / xScale;
-    pointY = (y - screenHeight/2) / yScale;
-  }
-  void handleTouchEnd(int id, float x, float y) {
-    pointX = (x - screenWidth/2) / xScale;
-    pointY = (y - screenHeight/2) / yScale;
-  }
+//  void handleTouchStart(int id, float x, float y) {
+//    pointX = (x - screenWidth/2) / xScale;
+//    pointY = (y - screenHeight/2) / yScale;
+//
+//    // play a thud sound
+//    playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
+//  }
+//  void handleTouchMove(int id, float x, float y) {
+//    pointX = (x - screenWidth/2) / xScale;
+//    pointY = (y - screenHeight/2) / yScale;
+//  }
+//  void handleTouchEnd(int id, float x, float y) {
+//    pointX = (x - screenWidth/2) / xScale;
+//    pointY = (y - screenHeight/2) / yScale;
+//  }
 };
 
 Application* currentApplication = new TestApplication();

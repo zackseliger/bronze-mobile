@@ -269,6 +269,7 @@
 		148BC7DB252CEA3C00915ED5 /* collection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7D9252CEA3C00915ED5 /* collection.cpp */; };
 		148BC7DE252E659B00915ED5 /* timestep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DC252E659B00915ED5 /* timestep.cpp */; };
 		148BC7E125327D2100915ED5 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DF25327D2100915ED5 /* scene.cpp */; };
+		148BC7E725354F3300915ED5 /* event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7E525354F3300915ED5 /* event.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -786,6 +787,8 @@
 		148BC7DD252E659B00915ED5 /* timestep.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timestep.h; sourceTree = "<group>"; };
 		148BC7DF25327D2100915ED5 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
 		148BC7E025327D2100915ED5 /* scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
+		148BC7E525354F3300915ED5 /* event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = event.cpp; sourceTree = "<group>"; };
+		148BC7E625354F3300915ED5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = event.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1363,6 +1366,8 @@
 				148BC7DC252E659B00915ED5 /* timestep.cpp */,
 				148BC7E025327D2100915ED5 /* scene.h */,
 				148BC7DF25327D2100915ED5 /* scene.cpp */,
+				148BC7E625354F3300915ED5 /* event.h */,
+				148BC7E525354F3300915ED5 /* event.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1814,6 +1819,7 @@
 				14029AC125099D0B007FA72C /* platform.c in Sources */,
 				145D2F4E2510C53F00F84622 /* pfr.c in Sources */,
 				145D2F542510C56700F84622 /* psnames.c in Sources */,
+				148BC7E725354F3300915ED5 /* event.cpp in Sources */,
 				145D2BE12510BB5600F84622 /* almalloc.cpp in Sources */,
 				145D2F402510C4E200F84622 /* ftbzip2.c in Sources */,
 				145D2F562510C57100F84622 /* raster.c in Sources */,

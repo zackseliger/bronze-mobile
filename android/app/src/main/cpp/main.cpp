@@ -27,6 +27,7 @@
 #include <EGL/egl.h>
 #include "assets/fileasset.h" // have to init asset manager
 #include "application.h"
+#include "event.h"
 
 #include <android/sensor.h>
 #include <android/log.h>
@@ -211,6 +212,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         // event handling
         if (action == AMOTION_EVENT_ACTION_DOWN || action == AMOTION_EVENT_ACTION_POINTER_DOWN) {
             getCurrentApplication()->handleTouchStart((int)id, x, y);
+            emitEvent(TouchStart, new TouchEvent((int)id, x, y));
         }
         else if (action == AMOTION_EVENT_ACTION_MOVE) {
             getCurrentApplication()->handleTouchMove((int)id, x, y);
