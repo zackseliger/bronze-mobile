@@ -5,6 +5,14 @@
 #include "timestep.h"
 #include "scene.h"
 
+class Screen {
+public:
+  Screen(float, float);
+  
+  float width;
+  float height;
+};
+
 class Application {
 public:
   Application();
@@ -17,10 +25,9 @@ public:
   Context* context; // drawing
   Timestep* timestep; // delta time
   SceneManager* sceneManager; // scenes
+  Screen* screen; // screen information
   
-  // screen information
-  float screenWidth;
-  float screenHeight;
+  // game size information
   float gameWidth;
   float gameHeight;
   float xScale;
@@ -30,12 +37,6 @@ public:
   virtual void init();
   virtual void update();
   virtual void render();
-  
-  // events
-  virtual void handleResize(float, float);
-  virtual void handleTouchStart(int, float, float);
-  virtual void handleTouchMove(int, float, float);
-  virtual void handleTouchEnd(int, float, float);
 };
 
 Application* getCurrentApplication();

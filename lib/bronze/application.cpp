@@ -2,6 +2,12 @@
 #include "utils.h"
 #include <assert.h>
 #include "assets/sound.h"
+#include "event.h"
+
+Screen::Screen(float w, float h) {
+  this->width = w;
+  this->height = h;
+}
 
 Application::Application() {
   this->gameWidth = 500;
@@ -36,12 +42,41 @@ Application::Application(float w, float h, Context* ctx) {
   this->sceneManager = new SceneManager();
   this->timestep = new Timestep(60);
   this->context = ctx;
+  this->screen = new Screen(0,0);
   
   setCurrentApplication(this);
 }
 
 void Application::init() {
   initAudio();
+  
+  // set default resize callback
+  setEventListener(EventType::WindowResize, new EventListener([this](Event* e) {
+    WindowEvent* evt = static_cast<WindowEvent*>(e);
+    
+    this->screen->width = evt->width;
+    this->screen->height = evt->height;
+      
+    // decide to fill with width or full height
+    float ratio = this->screen->width / this->screen->height;
+    if (ratio > this->gameWidth / gameHeight) {
+      this->xScale = this->screen->height / this->gameHeight;
+      this->yScale = this->xScale;
+    }
+    else {
+      this->xScale = this->screen->width / this->gameWidth;
+      this->yScale = this->xScale;
+    }
+    
+    // redo our projection matrix
+    float right = (this->gameWidth/2) + (this->screen->width/this->xScale - this->gameWidth)/2;
+    float left = (-this->gameWidth/2) + (-this->screen->width/this->xScale + this->gameWidth)/2;
+    float top = (-this->gameHeight/2) + (-this->screen->height/this->yScale + this->gameHeight)/2;
+    float bot = (this->gameHeight/2) + (this->screen->height/this->yScale - this->gameHeight)/2;
+    
+    this->context->setViewport(0, 0, this->screen->width, this->screen->height);
+    this->context->setProjection(left, right, top, bot);
+  }));
 }
 
 void Application::update() {
@@ -53,38 +88,6 @@ void Application::render() {
   this->context->renderBegin();
   this->sceneManager->render();
 }
-
-void Application::handleResize(float w, float h) {
-  this->screenWidth = w;
-  this->screenHeight = h;
-    
-  // decide to fill with width or full height
-  float ratio = this->screenWidth / this->screenHeight;
-  if (ratio > this->gameWidth / gameHeight) {
-    this->xScale = this->screenHeight / this->gameHeight;
-    this->yScale = this->xScale;
-  }
-  else {
-    this->xScale = this->screenWidth / this->gameWidth;
-    this->yScale = this->xScale;
-  }
-  
-  // redo our projection matrix
-  float right = (this->gameWidth/2) + (this->screenWidth/this->xScale - this->gameWidth)/2;
-  float left = (-this->gameWidth/2) + (-this->screenWidth/this->xScale + this->gameWidth)/2;
-  float top = (-this->gameHeight/2) + (-this->screenHeight/this->yScale + this->gameHeight)/2;
-  float bot = (this->gameHeight/2) + (this->screenHeight/this->yScale - this->gameHeight)/2;
-  
-  this->context->setViewport(0, 0, this->screenWidth, this->screenHeight);
-  this->context->setProjection(left, right, top, bot);
-}
-
-void Application::handleTouchStart(int, float, float) { LOG("Default Application handleTouchStart"); }
-
-void Application::handleTouchMove(int, float, float) { LOG("Default Application handleTouchMove"); }
-
-void Application::handleTouchEnd(int, float, float) { LOG("Default Application handleTouchEnd"); }
-
 
 // global function to get the current application
 Application* getCurrentApplication() {

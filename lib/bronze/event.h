@@ -38,6 +38,7 @@ public:
 };
 
 void setEventListener(EventType, EventListener*);
+void removeEventListener(EventType);
 void emitEvent(EventType, Event*);
 
 #endif

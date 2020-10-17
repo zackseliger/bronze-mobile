@@ -61,8 +61,6 @@
 
 // orientation change
 - (void)orientationChanged:(NSNotification *)note {
-  getCurrentApplication()->handleResize([[self view] bounds].size.width, [[self view] bounds].size.height);
-  
   emitEvent(WindowResize, new WindowEvent([[self view] bounds].size.width, [[self view] bounds].size.height));
 }
 
@@ -79,29 +77,21 @@
 // touch events
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     for (UITouch* touch in touches) {
-      getCurrentApplication()->handleTouchStart((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
-      
       emitEvent(TouchStart, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-      getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
-      
       emitEvent(TouchEnd, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-      getCurrentApplication()->handleTouchMove((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
-      
       emitEvent(TouchMove, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
-      getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
-      
       emitEvent(TouchEnd, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }

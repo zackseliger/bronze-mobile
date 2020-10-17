@@ -103,22 +103,22 @@ public:
     setEventListener(TouchStart, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
       
       playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
     }));
     setEventListener(TouchMove, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
     }));
     setEventListener(TouchEnd, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
     }));
   }
   
@@ -157,23 +157,6 @@ public:
     // reset timestep so deltaTime isn't massive on first frame
     this->timestep->resetTime();
   }
-  
-  // touch events
-//  void handleTouchStart(int id, float x, float y) {
-//    pointX = (x - screenWidth/2) / xScale;
-//    pointY = (y - screenHeight/2) / yScale;
-//
-//    // play a thud sound
-//    playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
-//  }
-//  void handleTouchMove(int id, float x, float y) {
-//    pointX = (x - screenWidth/2) / xScale;
-//    pointY = (y - screenHeight/2) / yScale;
-//  }
-//  void handleTouchEnd(int id, float x, float y) {
-//    pointX = (x - screenWidth/2) / xScale;
-//    pointY = (y - screenHeight/2) / yScale;
-//  }
 };
 
 Application* currentApplication = new TestApplication();

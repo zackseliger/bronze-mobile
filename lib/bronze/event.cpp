@@ -25,6 +25,10 @@ void setEventListener(EventType type, EventListener* listener) {
   eventmap[type] = listener;
 }
 
+void removeEventListener(EventType type) {
+  eventmap.erase(type);
+}
+
 void emitEvent(EventType type, Event* event) {
   evtmap::iterator it;
   it = eventmap.find(type);
