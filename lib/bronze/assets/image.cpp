@@ -5,6 +5,7 @@
 #include <map>
 
 static strmap textures; // all the textures we'll load
+static bool antialias = true; // anti-alias our textures or don't
 
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
 static PngInfo read_and_update_info(const png_structp png_ptr, const png_infop info_ptr);
@@ -26,8 +27,6 @@ RawImageData getImageData(const char* filename) {
 
   png_read_end(png_ptr, info_ptr);
   png_destroy_read_struct(&png_ptr, &info_ptr, 0);
-    
-  printf("%s", img.data);
     
   freeAsset(img); // NOT TESTED
 
@@ -126,13 +125,23 @@ static GLenum get_gl_color_format(const int png_color_format) {
   return 0;
 }
 
+void setShouldAlias(bool useLinear) {
+  antialias = useLinear;
+}
+
 GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type, const GLvoid* pixels) {
   GLuint textureId;
   glGenTextures(1, &textureId);
 
   glBindTexture(GL_TEXTURE_2D, textureId);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  if (antialias) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
+  else {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, GL_UNSIGNED_BYTE, pixels);
@@ -140,19 +149,6 @@ GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type,
 
   glBindTexture(GL_TEXTURE_2D, 0);
   return textureId;
-}
-
-GLuint createVbo(const GLsizeiptr size, const GLvoid* data, const GLenum usage) {
-  assert(data != NULL);
-  GLuint vbo_object;
-  glGenBuffers(1, &vbo_object);
-  assert(vbo_object != 0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vbo_object);
-  glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  return vbo_object;
 }
 
 GLuint loadImage(const char* filename, const char* name) {

@@ -22,32 +22,28 @@
 #include <application.h>
 #include <context.h>
 
-// follows our finger
-//float pointX = 0;
-//float pointY = -100;
-
-class TestActor : public Actor {
+class Player : public Actor {
 public:
   float width;
   float height;
+  float maxSpeed;
   float speed;
+  uint32_t image;
   
-  TestActor(float x, float y) : super(x, y) {
-    this->speed = 1.0;
-    this->width = 50;
+  Player(float x, float y) : super(x, y) {
+    this->maxSpeed = 5.0;
+    this->speed = 0.0;
+    this->width = 100;
     this->height = 100;
+    this->image = getImage("playerIdle");
   }
   
   void render() {
-    this->context->setColor(0.9, 0.9, 0.9, 0.9);
-    this->context->drawRect(-this->width/2, -this->height/2, this->width, this->height);
+    this->context->drawImage(this->image, -this->width/2, -this->height/2, this->width, this->height);
   }
   
   void update(float dt) {
-    this->x += this->speed*dt;
     
-    if (this->x > 250) this->speed = -1;
-    else if (this->x < -250) this->speed = 1;
   }
 };
 
@@ -59,15 +55,13 @@ public:
   float pointX = 0;
   float pointY = -100;
   
-  // oop
-  Context* context;
+  // stuff I'm gonna take from the application
+  Application* app;
   
   TestScene() {
-    this->context = getCurrentApplication()->context;
+    this->app = getCurrentApplication();
     this->mainCollection = new Collection();
-    this->mainCollection->add(new TestActor(-250, 0));
-    this->mainCollection->add(new TestActor(-250, 200));
-    this->mainCollection->add(new TestActor(-250, -200));
+    this->mainCollection->add(new Player(0, 0));
   }
   
   void update(float dt) {
@@ -75,27 +69,6 @@ public:
   }
   
   void render() {
-    // draw textures
-    this->context->drawImage(getImage("testImage"), -100, 100, 200, 200);
-    
-    // draw text
-    this->context->setColor(0.8,0.2,0.2,std::abs(pointX/200));
-    this->context->drawText("Hello world. I am here!", -150, -250);
-    
-    this->context->setColor(0.4,0.4,0.4,1);
-    this->context->drawRect(pointX-5, pointY-5, 10, 10);
-    this->context->drawRect(-10,-10,20,20);//20x20 block in the center
-    
-    //testing out translating and rotating and stuff
-    this->context->translate(20,20);
-    this->context->rotate(pointX/100);
-      this->context->setColor(0.2,0.1,0.7,0.7);
-      this->context->drawRect(-10,-10,20,20);
-      this->context->setColor(0.5,0.9,0.1,1.0);
-      this->context->drawRect(100,100,20,20);
-    this->context->rotate(-pointX/100);
-    this->context->translate(-20,-20);
-    
     this->mainCollection->draw();
   }
   
@@ -103,22 +76,20 @@ public:
     setEventListener(TouchStart, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
-      
-      playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
+      this->pointX = (evt->x - this->app->screen->width/2) / this->app->xScale;
+      this->pointY = (evt->y - this->app->screen->height/2) / this->app->yScale;
     }));
     setEventListener(TouchMove, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
+      this->pointX = (evt->x - this->app->screen->width/2) / this->app->xScale;
+      this->pointY = (evt->y - this->app->screen->height/2) / this->app->yScale;
     }));
     setEventListener(TouchEnd, new EventListener([this](Event* e) {
       TouchEvent* evt = static_cast<TouchEvent*>(e);
       
-      this->pointX = (evt->x - getCurrentApplication()->screen->width/2) / getCurrentApplication()->xScale;
-      this->pointY = (evt->y - getCurrentApplication()->screen->height/2) / getCurrentApplication()->yScale;
+      this->pointX = (evt->x - this->app->screen->width/2) / this->app->xScale;
+      this->pointY = (evt->y - this->app->screen->height/2) / this->app->yScale;
     }));
   }
   
@@ -134,11 +105,18 @@ public:
   void init() {
     super::init();
     
+    setShouldAlias(false); // to keep hard edges on textures
+    
+    // background color
+    this->context->setBackground(0.13, 0.12, 0.2);
+    
     // set font
     this->context->setFont("Poetsen.ttf");
     
     // setup image
-    loadImage("image/pngtest.png", "testImage");
+    loadImage("image/player/idle.png", "playerIdle");
+    loadImage("image/player/walk1.png", "playerWalk1");
+    loadImage("image/player/walk2.png", "playerWalk2");
 
     // load sounds
     loadSound("audio/thud1.wav", "thud1");
@@ -148,7 +126,7 @@ public:
     loadSound("audio/thud5.wav", "thud5");
     loadSound("audio/thud6.wav", "thud6");
     loadSound("audio/thud7.wav", "thud7");
-    srand(time(NULL));
+    srand((uint)time(NULL));
     
     // create scenes and switch to initial one
     this->sceneManager->addScene("test", new TestScene());

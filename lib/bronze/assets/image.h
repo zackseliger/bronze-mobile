@@ -31,6 +31,7 @@ typedef struct {
 
 RawImageData getImageData(const char*);
 void releaseImage(const RawImageData* data);
+void setShouldAlias(bool);
 GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type, const GLvoid* pixels);
 
 GLuint createVbo(const GLsizeiptr size, const GLvoid* data, const GLenum usage);
