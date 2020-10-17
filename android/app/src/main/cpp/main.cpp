@@ -216,9 +216,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         }
         else if (action == AMOTION_EVENT_ACTION_MOVE) {
             getCurrentApplication()->handleTouchMove((int)id, x, y);
+            emitEvent(TouchMove, new TouchEvent((int)id, x, y));
         }
         else if (action == AMOTION_EVENT_ACTION_UP || action == AMOTION_EVENT_ACTION_POINTER_UP) {
             getCurrentApplication()->handleTouchEnd((int)id, x, y);
+            emitEvent(TouchEnd, new TouchEvent((int)id, x, y));
         }
 
         return 1;
@@ -254,6 +256,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             break;
         case APP_CMD_CONTENT_RECT_CHANGED:
             getCurrentApplication()->handleResize(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window));
+            emitEvent(WindowResize, new WindowEvent(ANativeWindow_getWidth(engine->app->window), ANativeWindow_getHeight(engine->app->window)));
             break;
         case APP_CMD_LOST_FOCUS:
             // Stop animating.

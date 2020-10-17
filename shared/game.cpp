@@ -108,6 +108,18 @@ public:
       
       playSound(("thud" + std::to_string(rand() % 7 + 1)).c_str());
     }));
+    setEventListener(TouchMove, new EventListener([this](Event* e) {
+      TouchEvent* evt = static_cast<TouchEvent*>(e);
+      
+      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+    }));
+    setEventListener(TouchEnd, new EventListener([this](Event* e) {
+      TouchEvent* evt = static_cast<TouchEvent*>(e);
+      
+      this->pointX = (evt->x - getCurrentApplication()->screenWidth/2) / getCurrentApplication()->xScale;
+      this->pointY = (evt->y - getCurrentApplication()->screenHeight/2) / getCurrentApplication()->yScale;
+    }));
   }
   
   void onUnload() {

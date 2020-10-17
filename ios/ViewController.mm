@@ -62,11 +62,12 @@
 // orientation change
 - (void)orientationChanged:(NSNotification *)note {
   getCurrentApplication()->handleResize([[self view] bounds].size.width, [[self view] bounds].size.height);
+  
+  emitEvent(WindowResize, new WindowEvent([[self view] bounds].size.width, [[self view] bounds].size.height));
 }
 
-// update possibly?
+// update
 - (void)update {
-  //TODO, is self.timeSinceLastUpdate a thing?
   getCurrentApplication()->update();
 }
 
@@ -86,16 +87,22 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
       getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+      
+      emitEvent(TouchEnd, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
       getCurrentApplication()->handleTouchMove((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+      
+      emitEvent(TouchMove, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch* touch in touches) {
       getCurrentApplication()->handleTouchEnd((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
+      
+      emitEvent(TouchEnd, new TouchEvent((int)(size_t)touch.estimationUpdateIndex, [touch locationInView:self.view].x, [touch locationInView:self.view].y));
     }
 }
 
