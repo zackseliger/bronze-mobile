@@ -3,7 +3,7 @@
 #include <map>
 #include <limits.h>
 
-static strmap sounds; // all the sounds we'll load
+static soundmap sounds; // all the sounds we'll load
 
 STREAM_DATA::STREAM_DATA(FileData fd) : asset(fd) {
   STREAM_DATA::offset = 0;
@@ -140,13 +140,13 @@ ALuint loadSound(const char* filename, const char* name) {
   }
   
   // put buffer in sounds map
-  sounds.insert(strmap::value_type(name, buffer));
+  sounds.insert(soundmap::value_type(name, buffer));
 
   return buffer;
 }
 
 void playSound(const char* name) {
-  strmap::iterator it;
+  soundmap::iterator it;
   ALuint soundBuffer;
   
   it = sounds.find(name);

@@ -4,7 +4,7 @@
 #include <map>
 
 typedef std::map<EventType, EventListener*> evtmap;
-evtmap eventmap;
+static evtmap eventmap;
 
 TouchEvent::TouchEvent(int id, float x, float y) {
   this->id = id;

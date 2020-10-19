@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <map>
 
-static strmap textures; // all the textures we'll load
+static texturemap textures; // all the textures we'll load
 static bool antialias = true; // anti-alias our textures or don't
 
 static void read_png_data_callback(png_structp png_ptr, png_byte* png_data, png_size_t read_length);
@@ -151,23 +151,28 @@ GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type,
   return textureId;
 }
 
-GLuint loadImage(const char* filename, const char* name) {
+Texture* loadImage(const char* filename, const char* name) {
   RawImageData imageData = getImageData(filename);
   GLuint buffer = loadTexture(imageData.width, imageData.height, imageData.gl_color_format, imageData.data);
+  int w = imageData.width;
+  int h = imageData.height;
+  void* d;
+  memcpy(&d, &imageData.data, sizeof(imageData.data));
+  Texture* tex = new Texture(w, h, d, buffer);
   releaseImage(&imageData);
   
-  textures.insert(strmap::value_type(name, buffer));
+  textures.insert(texturemap::value_type(name, tex));
   
-  return buffer;
+  return tex;
 }
 
-GLuint getImage(const char* name) {
-  strmap::iterator it;
+Texture* getImage(const char* name) {
+  texturemap::iterator it;
   
   it = textures.find(name);
   if (it == textures.end()) {
     LOG("COULDN'T FIND TEXTURE \"%s\"", name);
-    return 0;
+    return NULL;
   }
   
   return it->second;

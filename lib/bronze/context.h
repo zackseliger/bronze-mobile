@@ -3,6 +3,7 @@
 
 #include "opengl.h"
 #include "assets/fileasset.h"
+#include "texture.h"
 #include <freetype-gl.h>
 
 class Context {
@@ -27,7 +28,7 @@ public:
   virtual void setColor(float, float, float, float) = 0;
   virtual void setColor(float, float, float) = 0;
   virtual void drawRect(float, float, float, float) = 0;
-  virtual void drawImage(GLuint, float, float, float, float) = 0;
+  virtual void drawImage(Texture*, float, float, float, float) = 0;
   virtual void drawText(const char*, float, float) = 0;
 };
 
@@ -74,7 +75,7 @@ public:
   void setColor(float, float, float, float);
   void setColor(float, float, float);
   void drawRect(float, float, float, float);
-  void drawImage(GLuint, float, float, float, float);
+  void drawImage(Texture*, float, float, float, float);
   void drawText(const char*, float, float);
 };
 

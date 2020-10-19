@@ -270,6 +270,7 @@
 		148BC7DE252E659B00915ED5 /* timestep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DC252E659B00915ED5 /* timestep.cpp */; };
 		148BC7E125327D2100915ED5 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7DF25327D2100915ED5 /* scene.cpp */; };
 		148BC7E725354F3300915ED5 /* event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7E525354F3300915ED5 /* event.cpp */; };
+		148BC7EA253E14CD00915ED5 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148BC7E8253E14CD00915ED5 /* texture.cpp */; };
 		148D7F37250DE55D00C163E4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148D7F36250DE55C00C163E4 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
@@ -789,6 +790,8 @@
 		148BC7E025327D2100915ED5 /* scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
 		148BC7E525354F3300915ED5 /* event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = event.cpp; sourceTree = "<group>"; };
 		148BC7E625354F3300915ED5 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = event.h; sourceTree = "<group>"; };
+		148BC7E8253E14CD00915ED5 /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
+		148BC7E9253E14CD00915ED5 /* texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 		148D7F36250DE55C00C163E4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -1368,6 +1371,8 @@
 				148BC7DF25327D2100915ED5 /* scene.cpp */,
 				148BC7E625354F3300915ED5 /* event.h */,
 				148BC7E525354F3300915ED5 /* event.cpp */,
+				148BC7E9253E14CD00915ED5 /* texture.h */,
+				148BC7E8253E14CD00915ED5 /* texture.cpp */,
 			);
 			name = bronze;
 			path = ../lib/bronze;
@@ -1739,6 +1744,7 @@
 				145D2F2A2510C4B600F84622 /* ftstroke.c in Sources */,
 				145D2BCE2510BB5600F84622 /* mixer_c.cpp in Sources */,
 				145D2BD52510BB5600F84622 /* distortion.cpp in Sources */,
+				148BC7EA253E14CD00915ED5 /* texture.cpp in Sources */,
 				148BC7C42528409600915ED5 /* avr.c in Sources */,
 				145D2F462510C50C00F84622 /* type1cid.c in Sources */,
 				145D2F142510C40600F84622 /* winfnt.c in Sources */,

@@ -18,6 +18,7 @@
 #include <assets/sound.h>
 
 // graphics
+#include <texture.h>
 #include <opengl.h>
 #include <application.h>
 #include <context.h>
@@ -28,14 +29,14 @@ public:
   float height;
   float maxSpeed;
   float speed;
-  uint32_t image;
+  Texture* image;
   
   Player(float x, float y) : super(x, y) {
     this->maxSpeed = 5.0;
     this->speed = 0.0;
-    this->width = 100;
-    this->height = 100;
     this->image = getImage("playerIdle");
+    this->width = this->image->width*10;
+    this->height = this->image->height*10;
   }
   
   void render() {

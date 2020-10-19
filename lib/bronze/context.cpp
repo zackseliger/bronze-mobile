@@ -249,7 +249,7 @@ void OpenGLContext::drawRect(float x, float y, float width, float height) {
   glDisableVertexAttribArray(this->g_texCoord);
 }
 
-void OpenGLContext::drawImage(GLuint tex, float x, float y, float width, float height) {
+void OpenGLContext::drawImage(Texture* tex, float x, float y, float width, float height) {
   GLfloat positions[] = {x,y, x,y+height, x+width,y, x+width,y+height};
   GLfloat colors[] = {
     1.0,1.0,1.0,1.0,
@@ -262,7 +262,7 @@ void OpenGLContext::drawImage(GLuint tex, float x, float y, float width, float h
   glUseProgram(this->generalProgram);
   glActiveTexture(GL_TEXTURE1);
   
-  glBindTexture(GL_TEXTURE_2D, tex);
+  glBindTexture(GL_TEXTURE_2D, tex->id);
   glUniform1i(this->g_texLoc, 1);
   glVertexAttribPointer(this->g_posLoc, 2, GL_FLOAT, GL_FALSE, 0, positions);
   glVertexAttribPointer(this->g_color, 4, GL_FLOAT, GL_FALSE, 0, colors);

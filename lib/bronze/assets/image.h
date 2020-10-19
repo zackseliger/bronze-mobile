@@ -1,9 +1,15 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
+#include <map>
 #include <png.h>
 #include "fileasset.h"
 #include "../opengl.h"
+#include "../texture.h"
+#include "../utils.h"
+
+// our map type
+typedef std::map<const char*, Texture*, char_cmp> texturemap;
 
 struct PngHandle {
     const png_byte* data;
@@ -36,7 +42,7 @@ GLuint loadTexture(const GLsizei width, const GLsizei height, const GLenum type,
 
 GLuint createVbo(const GLsizeiptr size, const GLvoid* data, const GLenum usage);
 
-GLuint loadImage(const char* filename, const char* name);
-GLuint getImage(const char* name);
+Texture* loadImage(const char* filename, const char* name);
+Texture* getImage(const char* name);
 
 #endif
